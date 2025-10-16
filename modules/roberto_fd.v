@@ -2,6 +2,10 @@ module roberto_fd (
     input  wire clock,
     input  wire zera_sensor,
     input  wire zera_serial,
+    input  wire zera_seg,
+    input  wire zera_2,
+    input  wire cont_seg,
+    input  wire cont_2,
     input  wire medir, 
     input  wire echo1,  
     input  wire echo2,  
@@ -9,7 +13,6 @@ module roberto_fd (
     input  wire sel_sens1,
     input  wire sel_sens2,
     input  wire sel_sens3,
-    input  wire sel_medida,
     input  wire partida_tx,
     output wire trigger1, 
     output wire trigger2, 
@@ -19,6 +22,8 @@ module roberto_fd (
     output wire pronto_medida3, 
     output wire saida_serial, 
     output wire pronto_serial, 
+    output wire pronto_seg, 
+    output wire pronto_2, 
     output wire [11:0] db_medida1,
     output wire [11:0] db_medida2,
     output wire [11:0] db_medida3,
@@ -125,7 +130,7 @@ module roberto_fd (
         .D2     (s_medidas_asc_2), 
         .D1     (s_medidas_asc_3),
         .D0     (7'b0000000     ),  // #
-        .SEL    (sel_medida     ),
+        .SEL    (s_cont_2       ),
         .MUX_OUT(s_entr_serial  )
     );
 
@@ -140,6 +145,36 @@ module roberto_fd (
         .db_partida     (             ),
         .db_saida_serial(             ),
         .db_estado      (             )
+    );
+
+    /******************* Contadores **********************/ 
+
+    // Contador de 1 segundo
+    contador_m #(
+        .M(50_000_000),
+        .N(26)
+    ) contador_segundos (
+        .clock  (clock     ),
+        .zera_as(          ),
+        .zera_s (zera_seg  ),
+        .conta  (cont_seg  ),
+        .Q      (          ), 
+        .fim    (pronto_seg),
+        .meio   (          )
+    );
+
+    // Contador até 2 
+    contador_m #(
+        .M(2),
+        .N(1)
+    ) contador_segundos (
+        .clock  (clock     ),
+        .zera_as(          ),
+        .zera_s (zera_2    ),
+        .conta  (cont_2    ),
+        .Q      (s_cont_2  ), 
+        .fim    (pronto_2  ),
+        .meio   (          )
     );
 
 
