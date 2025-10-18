@@ -10,9 +10,6 @@ module roberto_fd (
     input  wire echo1,  
     input  wire echo2,  
     input  wire echo3,  
-    input  wire [1:0] sel_sens1,
-    input  wire [1:0] sel_sens2,
-    input  wire [1:0] sel_sens3,
     input  wire partida_tx,
     input  wire zera_3,
     input  wire cont_3,  
@@ -23,7 +20,6 @@ module roberto_fd (
     output wire saida_serial, 
     output wire pronto_serial, 
     output wire pronto_seg, 
-    output wire pronto_2, // remover? inutil
     output wire [1:0] Q_2,
     output wire [11:0] db_medida1,
     output wire [11:0] db_medida2,
@@ -63,12 +59,12 @@ module roberto_fd (
     mux_4x1_n #(
         .BITS(7)
     ) MUL_sens1 (
-        .D3     ({3'b011, s_medida1[11:8]}),  // para converter para asc, precisa colocar 011 antes do valor
-        .D2     ({3'b011, s_medida1[7:4]} ), 
-        .D1     ({3'b011, s_medida1[3:0]} ),
-        .D0     (7'b0100011               ),  // #
+        .D3     (7'b0100011),  // para converter para asc, precisa colocar 011 antes do valor
+        .D2     ({3'b011, s_medida1[3:0]}   ), 
+        .D1     ({3'b011, s_medida1[7:4]}   ),
+        .D0     ({3'b011, s_medida1[11:8]}  ),  // #
         .SEL    (s_Q_2                      ),
-        .MUX_OUT(s_medidas_asc_1          )
+        .MUX_OUT(s_medidas_asc_1            )
     );
 
     // Sensor ultrassônico 2
@@ -89,12 +85,12 @@ module roberto_fd (
     mux_4x1_n #(
         .BITS(7)
     ) MUL_sens2 (
-        .D3     ({3'b011, s_medida2[11:8]}),  // para converter para asc, precisa colocar 011 antes do valor
-        .D2     ({3'b011, s_medida2[7:4]} ), 
-        .D1     ({3'b011, s_medida2[3:0]} ),
-        .D0     (7'b0100011               ),  // #
-        .SEL    (s_Q_2                    ),
-        .MUX_OUT(s_medidas_asc_2          )
+        .D3     (7'b0100011                 ),  // para converter para asc, precisa colocar 011 antes do valor
+        .D2     ({3'b011, s_medida2[3:0]}   ), 
+        .D1     ({3'b011, s_medida2[7:4]}   ),
+        .D0     ({3'b011, s_medida2[11:8]}  ),  // #
+        .SEL    (s_Q_2                      ),
+        .MUX_OUT(s_medidas_asc_2            )
     );
 
     // Sensor ultrassônico 3
@@ -115,12 +111,12 @@ module roberto_fd (
     mux_4x1_n #(
         .BITS(7)
     ) MUL_sens3 (
-        .D3     ({3'b011, s_medida3[11:8]}),  // para converter para asc, precisa colocar 011 antes do valor
-        .D2     ({3'b011, s_medida3[7:4]} ), 
-        .D1     ({3'b011, s_medida3[3:0]} ),
-        .D0     (7'b0100011               ),  // #
-        .SEL    (s_Q_2                    ),
-        .MUX_OUT(s_medidas_asc_3          )
+        .D3     (7'b0100011                 ),  // para converter para asc, precisa colocar 011 antes do valor
+        .D2     ({3'b011, s_medida3[3:0]}   ), 
+        .D1     ({3'b011, s_medida3[7:4]}   ),
+        .D0     ({3'b011, s_medida3[11:8]}  ),  // #
+        .SEL    (s_Q_2                      ),
+        .MUX_OUT(s_medidas_asc_3            )
     );
 
 
@@ -130,12 +126,12 @@ module roberto_fd (
     mux_4x1_n #(
         .BITS(7)
     ) MUL_serial (
-        .D3     (s_medidas_asc_1),  // para converter para asc, precisa colocar 011 antes do valor
-        .D2     (s_medidas_asc_2), 
-        .D1     (s_medidas_asc_3),
-        .D0     (7'b0000000     ),  // #
-        .SEL    (s_Q_3          ),
-        .MUX_OUT(s_entr_serial  )
+        .D3     (7'b0000000         ),  // para converter para asc, precisa colocar 011 antes do valor
+        .D2     (s_medidas_asc_3    ), 
+        .D1     (s_medidas_asc_2    ),
+        .D0     (s_medidas_asc_1    ),  // #
+        .SEL    (s_Q_3              ),
+        .MUX_OUT(s_entr_serial      )
     );
 
     // Saída serial
@@ -176,8 +172,8 @@ module roberto_fd (
         .zera_as(          ),
         .zera_s (zera_2    ),
         .conta  (cont_2    ),
-        .Q      (s_Q_2  ), 
-        .fim    (pronto_2  ),
+        .Q      (s_Q_2     ), 
+        .fim    (          ),
         .meio   (          )
     );
 

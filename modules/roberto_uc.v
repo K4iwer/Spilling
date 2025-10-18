@@ -5,23 +5,18 @@ module roberto_uc (
     input wire pronto_seg,
     input wire [1:0] Q_2,
     input wire [1:0] Q_3,
-    input wire pronto_medida1,
-    input wire pronto_medida2,
-    input wire pronto_medida3,
     input wire pronto_serial,
     output reg cont_2,
     output reg cont_3,
     output reg zera_2,
     output reg zera_3,
     output reg partida_tx,
-    output reg [1:0] sel_sens1,
-    output reg [1:0] sel_sens2,
-    output reg [1:0] sel_sens3,
     output reg medir,
     output reg zera_sensor,
     output reg zera_serial,
     output reg zera_seg,
     output reg cont_seg,
+    output reg pronto,
     output reg db_estado
 );
 
@@ -55,7 +50,7 @@ always @* begin
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
         proxEnvio:      Eprox = (Q_3 == 2'b11) ? proxSensor : envia;
         proxSensor:     Eprox = (Q_2 == 2'b10) ? final : envia;
-        final:          Eprox = inicial;
+        final:          Eprox = reset? inicial : final;
         default:        Eprox = inicial;
     endcase
 end
@@ -69,13 +64,11 @@ always @* begin
     zera_2 = 1'b0;
     zera_3 = 1'b0;
     medir = 1'b0;
-    sel_sens1 = 1'b0;
-    sel_sens2 = 1'b0;
-    sel_sens3 = 1'b0;
     partida_tx = 1'b0;
     cont_2 = 1'b0;
     cont_3 = 1'b0;
     cont_seg = 1'b0;
+    pronto = 1'b0;
 
     case (Eatual)
         inicial: begin
@@ -98,6 +91,10 @@ always @* begin
         proxSensor: begin
             cont_2 = 1'b1;
             zera_3 = 1'b1;
+        end
+        final: begin
+            zera_2 = 1'b1;
+            pronto = 1'b1;
         end
     endcase
 
