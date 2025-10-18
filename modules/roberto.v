@@ -9,6 +9,7 @@ module roberto (
     output wire trigger2,
     output wire trigger3,
     output wire saida_serial,
+    output wire pronto
 );
 
     wire s_zera_sensor;
@@ -69,6 +70,7 @@ module roberto (
         .pronto_medida1(),
         .pronto_medida2(),
         .pronto_medida3(),   
+        .pronto        (pronto),
     );
 
     // detetor de borda
