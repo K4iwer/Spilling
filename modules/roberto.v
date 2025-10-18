@@ -64,7 +64,7 @@ module roberto (
         .db_estado_ult ()
     );
 
-    module roberto_uc (
+     roberto_uc UC (
         .clock         (),
         .reset         (),
         .pronto_medida1(),

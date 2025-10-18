@@ -14,16 +14,17 @@ module roberto_fd (
     input  wire [1:0] sel_sens2,
     input  wire [1:0] sel_sens3,
     input  wire partida_tx,
+    input  wire zera_3,
+    input  wire cont_3,  
+    output wire [1:0] Q_3,
     output wire trigger1, 
     output wire trigger2, 
-    output wire trigger3, 
-    output wire pronto_medida1, 
-    output wire pronto_medida2, 
-    output wire pronto_medida3, 
+    output wire trigger3,  
     output wire saida_serial, 
     output wire pronto_serial, 
     output wire pronto_seg, 
-    output wire pronto_2, 
+    output wire pronto_2, // remover? inutil
+    output wire [1:0] Q_2,
     output wire [11:0] db_medida1,
     output wire [11:0] db_medida2,
     output wire [11:0] db_medida3,
@@ -38,6 +39,9 @@ module roberto_fd (
     wire [6:0]  s_medidas_asc_2;
     wire [6:0]  s_medidas_asc_3;
     wire [6:0]  s_entr_serial;
+    wire [1:0]  s_Q_2;
+    wire [1:0]  s_Q_3;
+
 
     /******************* Medição da distância **********************/ 
 
@@ -49,7 +53,7 @@ module roberto_fd (
         .echo     (echo1         ),
         .trigger  (trigger1      ),
         .medida   (s_medida1     ),
-        .pronto   (pronto_medida1),
+        .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
         .db_estado(db_estado_ult )
@@ -63,7 +67,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida1[7:4]} ), 
         .D1     ({3'b011, s_medida1[3:0]} ),
         .D0     (7'b0100011               ),  // #
-        .SEL    (sel_sens1                ),
+        .SEL    (s_Q_2                      ),
         .MUX_OUT(s_medidas_asc_1          )
     );
 
@@ -75,7 +79,7 @@ module roberto_fd (
         .echo     (echo2         ),
         .trigger  (trigger2      ),
         .medida   (s_medida2     ),
-        .pronto   (pronto_medida2),
+        .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
         .db_estado(db_estado_ult )
@@ -89,7 +93,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida2[7:4]} ), 
         .D1     ({3'b011, s_medida2[3:0]} ),
         .D0     (7'b0100011               ),  // #
-        .SEL    (sel_sens2                ),
+        .SEL    (s_Q_2                    ),
         .MUX_OUT(s_medidas_asc_2          )
     );
 
@@ -101,7 +105,7 @@ module roberto_fd (
         .echo     (echo3         ),
         .trigger  (trigger3      ),
         .medida   (s_medida3     ),
-        .pronto   (pronto_medida3),
+        .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
         .db_estado(db_estado_ult )
@@ -115,7 +119,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida3[7:4]} ), 
         .D1     ({3'b011, s_medida3[3:0]} ),
         .D0     (7'b0100011               ),  // #
-        .SEL    (sel_sens3                ),
+        .SEL    (s_Q_2                    ),
         .MUX_OUT(s_medidas_asc_3          )
     );
 
@@ -130,7 +134,7 @@ module roberto_fd (
         .D2     (s_medidas_asc_2), 
         .D1     (s_medidas_asc_3),
         .D0     (7'b0000000     ),  // #
-        .SEL    (s_cont_2       ),
+        .SEL    (s_Q_3          ),
         .MUX_OUT(s_entr_serial  )
     );
 
@@ -166,19 +170,33 @@ module roberto_fd (
     // Contador até 2 
     contador_m #(
         .M(2),
-        .N(1)
-    ) contador_segundos (
+        .N(2)
+    ) contador_ate_2 (
         .clock  (clock     ),
         .zera_as(          ),
         .zera_s (zera_2    ),
         .conta  (cont_2    ),
-        .Q      (s_cont_2  ), 
+        .Q      (s_Q_2  ), 
         .fim    (pronto_2  ),
         .meio   (          )
     );
 
+    contador_m #(
+        .M(3),
+        .N(2)
+    ) contador_ate_3 (
+        .clock  (clock     ),
+        .zera_as(          ),
+        .zera_s (zera_3    ),
+        .conta  (cont_3    ),
+        .Q      (s_Q_3     ), 
+        .fim    (          ),
+        .meio   (          )
+    );
 
 
+    assign Q_2 = s_Q_2;
+    assign Q_3 = s_Q_3;
     assign db_medida1 = s_medida1;
     assign db_medida2 = s_medida2;
     assign db_medida3 = s_medida3;
