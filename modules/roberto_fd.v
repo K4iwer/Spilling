@@ -177,6 +177,7 @@ module roberto_fd (
         .meio   (          )
     );
 
+    // Contador até 3
     contador_m #(
         .M(3),
         .N(2)

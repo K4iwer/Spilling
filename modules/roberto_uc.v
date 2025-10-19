@@ -17,16 +17,16 @@ module roberto_uc (
     output reg zera_seg,
     output reg cont_seg,
     output reg pronto,
-    output reg db_estado
+    output reg [2:0] db_estado
 );
 
 /******************* Estados **********************/ 
 parameter inicial       = 3'b000;
-parameter medir         = 3'b001;
+parameter est_medir     = 3'b001;
 parameter envia         = 3'b010;
 parameter proxEnvio     = 3'b011;
 parameter proxSensor    = 3'b100;
-parameter final         = 3'b101;
+parameter est_final     = 3'b101;
 
 /******************* Variáveis de estado **********************/ 
 
@@ -45,12 +45,12 @@ end
 
 always @* begin
     case (Eatual)
-        inicial:        Eprox = jogar ? medir : inicial;
-        medir:          Eprox = pronto_seg ? envia : medir;
+        inicial:        Eprox = jogar ? est_medir : inicial;
+        est_medir:      Eprox = pronto_seg ? envia : est_medir;
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
         proxEnvio:      Eprox = (Q_3 == 2'b11) ? proxSensor : envia;
-        proxSensor:     Eprox = (Q_2 == 2'b10) ? final : envia;
-        final:          Eprox = reset? inicial : final;
+        proxSensor:     Eprox = (Q_2 == 2'b10) ? est_final : envia;
+        est_final:      Eprox = reset? inicial : est_final;
         default:        Eprox = inicial;
     endcase
 end
@@ -78,12 +78,12 @@ always @* begin
             zera_2 = 1'b1;
             zera_3 = 1'b1;
         end
-        medir: begin
+        est_medir: begin
             medir = 1'b1;
             cont_seg = 1'b1;
         end
         envia: begin
-            partida_tx: 1'b1;
+            partida_tx = 1'b1;
         end
         proxEnvio: begin
             cont_3 = 1'b1;
@@ -92,7 +92,7 @@ always @* begin
             cont_2 = 1'b1;
             zera_3 = 1'b1;
         end
-        final: begin
+        est_final: begin
             zera_2 = 1'b1;
             pronto = 1'b1;
         end
@@ -104,11 +104,11 @@ end
 always @* begin
     case(Eatual)
         inicial:    db_estado = 3'b000;
-        medir:      db_estado = 3'b001;
+        est_medir:  db_estado = 3'b001;
         envia:      db_estado = 3'b010;
         proxEnvio:  db_estado = 3'b011;
         proxSensor: db_estado = 3'b100;
-        final:      db_estado = 3'b101;
+        est_final:  db_estado = 3'b101;
         default:    db_estado = 3'b111; // erro
     endcase
 end

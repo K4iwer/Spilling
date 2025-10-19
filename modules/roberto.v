@@ -28,7 +28,6 @@ module roberto (
     wire s_ligar;
     wire s_pronto_serial;
     wire s_pronto_seg;
-    wire s_pronto; // pode usar pra db tbm
     wire [2:0] s_db_estado; // passar por um hex
 
     roberto_fd FD (
@@ -79,7 +78,7 @@ module roberto (
         .zera_serial    (s_zera_serial      ),
         .zera_seg       (s_zera_seg         ),
         .cont_seg       (s_cont_seg         ),
-        .pronto         (s_pronto           ),
+        .pronto         (pronto             ),
         .db_estado      (s_db_estado        )
     );
 

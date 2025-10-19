@@ -53,7 +53,7 @@ module roberto_tb;
 
         for (i = 0; i < 4; i = i + 1) begin
             $display("Caso");
-            wait(trigger == 1);
+            wait(trigger1 == 1);
             #400_000; // tempo entre trigger e echo
 
             
