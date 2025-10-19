@@ -5,12 +5,18 @@ module roberto (
     input wire echo1,
     input wire echo2,
     input wire echo3,
+    input wire sel_med1,
+    input wire sel_med2,
     output wire trigger1,
     output wire trigger2,
     output wire trigger3,
     output wire saida_serial,
     output wire pronto,
-    output wire [2:0] estado // saída do estado para display 7 segmentos, ainda ta errado aqui
+    output wire [6:0] db_estado,
+    // output wire [6:0] db_ult,
+    output wire [6:0] db_medida1,
+    output wire [6:0] db_medida2,
+    output wire [6:0] db_medida3
 );
 
     wire s_zera_sensor;
@@ -28,7 +34,12 @@ module roberto (
     wire s_ligar;
     wire s_pronto_serial;
     wire s_pronto_seg;
-    wire [2:0] s_db_estado; // passar por um hex
+    wire [3:0]  s_db_estado; // passar por um hex
+    wire [3:0]  s_db_ult;    // passar por um hex
+    wire [11:0] s_db_medida_out; 
+    wire [11:0] s_db_medida1; 
+    wire [11:0] s_db_medida2; 
+    wire [11:0] s_db_medida3; 
 
     roberto_fd FD (
         .clock         (clock           ),
@@ -53,10 +64,10 @@ module roberto (
         .saida_serial  (saida_serial    ),
         .pronto_serial (s_pronto_serial ),
         .pronto_seg    (s_pronto_seg    ),
-        .db_medida1    (),
-        .db_medida2    (),
-        .db_medida3    (),
-        .db_estado_ult ()
+        .db_medida1    (s_db_medida1    ),
+        .db_medida2    (s_db_medida2    ),
+        .db_medida3    (s_db_medida3    )
+        // .db_estado_ult (s_db_ult        )
     );
 
     
@@ -91,6 +102,46 @@ module roberto (
         .pulso ( s_ligar      )
     );
 
+    // hexa estado UC
+    hexa7seg HEX_EST ( 
+        .hexa    ( s_db_estado ), 
+        .display ( db_estado   )
+    );
 
+    // // hexa estado ultrassom
+    // hexa7seg HEX_ULT ( 
+    //     .hexa    ( s_db_ult ), 
+    //     .display ( db_ult   )
+    // );
+
+    // hexa medida1
+    hexa7seg HEX_Medida1 ( 
+        .hexa    ( s_db_medida_out[11:8] ), 
+        .display ( db_medida1        )
+    );
+
+    // hexa medida2
+    hexa7seg HEX_Medida2 ( 
+        .hexa    ( s_db_medida_out[7:4] ), 
+        .display ( db_medida2       )
+    );
+
+    // hexa medida3
+    hexa7seg HEX_Medida3 ( 
+        .hexa    ( s_db_medida_out[3:0] ), 
+        .display ( db_medida3       )
+    );
+
+    // mux serial
+    mux_4x1_n #(
+        .BITS(12)
+    ) MUL_serial (
+        .D3     (12'b000000000000    ),
+        .D2     (s_db_medida3        ), 
+        .D1     (s_db_medida2        ),
+        .D0     (s_db_medida1        ),
+        .SEL    ({sel_med2,sel_med1} ),
+        .MUX_OUT(s_db_medida_out     )
+    );
 
 endmodule

@@ -23,8 +23,8 @@ module roberto_fd (
     output wire [1:0] Q_2,
     output wire [11:0] db_medida1,
     output wire [11:0] db_medida2,
-    output wire [11:0] db_medida3,
-    output wire [3:0] db_estado_ult
+    output wire [11:0] db_medida3
+    // output wire [3:0] db_estado_ult
 );
 
     // Sinais internos
@@ -52,7 +52,7 @@ module roberto_fd (
         .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
-        .db_estado(db_estado_ult )
+        .db_estado( )
     );
 
     // mux sensor 1
@@ -63,7 +63,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida1[3:0]}   ), 
         .D1     ({3'b011, s_medida1[7:4]}   ),
         .D0     ({3'b011, s_medida1[11:8]}  ),  // #
-        .SEL    (s_Q_2                      ),
+        .SEL    (s_Q_3                      ),
         .MUX_OUT(s_medidas_asc_1            )
     );
 
@@ -78,7 +78,7 @@ module roberto_fd (
         .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
-        .db_estado(db_estado_ult )
+        .db_estado( )
     );
 
     // mux sensor 2
@@ -89,7 +89,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida2[3:0]}   ), 
         .D1     ({3'b011, s_medida2[7:4]}   ),
         .D0     ({3'b011, s_medida2[11:8]}  ),  // #
-        .SEL    (s_Q_2                      ),
+        .SEL    (s_Q_3                      ),
         .MUX_OUT(s_medidas_asc_2            )
     );
 
@@ -104,7 +104,7 @@ module roberto_fd (
         .pronto   (              ),
         .db_medir (              ),
         .db_reset (              ),
-        .db_estado(db_estado_ult )
+        .db_estado( )
     );
 
     // mux sensor 3
@@ -115,7 +115,7 @@ module roberto_fd (
         .D2     ({3'b011, s_medida3[3:0]}   ), 
         .D1     ({3'b011, s_medida3[7:4]}   ),
         .D0     ({3'b011, s_medida3[11:8]}  ),  // #
-        .SEL    (s_Q_2                      ),
+        .SEL    (s_Q_3                      ),
         .MUX_OUT(s_medidas_asc_3            )
     );
 
@@ -126,11 +126,11 @@ module roberto_fd (
     mux_4x1_n #(
         .BITS(7)
     ) MUL_serial (
-        .D3     (7'b0000000         ),  // para converter para asc, precisa colocar 011 antes do valor
+        .D3     (7'b0000000         ),
         .D2     (s_medidas_asc_3    ), 
         .D1     (s_medidas_asc_2    ),
-        .D0     (s_medidas_asc_1    ),  // #
-        .SEL    (s_Q_3              ),
+        .D0     (s_medidas_asc_1    ),
+        .SEL    (s_Q_2              ),
         .MUX_OUT(s_entr_serial      )
     );
 
@@ -151,8 +151,8 @@ module roberto_fd (
 
     // Contador de 1 segundo
     contador_m #(
-        .M(50_000_000),
-        .N(26)
+        .M(1_000_000),  // 50_000_000
+        .N(20)           // 26
     ) contador_segundos (
         .clock  (clock     ),
         .zera_as(          ),
@@ -165,7 +165,7 @@ module roberto_fd (
 
     // Contador até 2 
     contador_m #(
-        .M(2),
+        .M(3),
         .N(2)
     ) contador_ate_2 (
         .clock  (clock     ),
@@ -179,7 +179,7 @@ module roberto_fd (
 
     // Contador até 3
     contador_m #(
-        .M(3),
+        .M(4),
         .N(2)
     ) contador_ate_3 (
         .clock  (clock     ),

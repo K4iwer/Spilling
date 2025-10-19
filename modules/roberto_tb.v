@@ -43,16 +43,19 @@ module roberto_tb;
         // Valores iniciais
         clock = 0;
         reset = 1;
-        ligar = 0;
+        ligar = 1;
         echo1 = 0;
         echo2 = 0;
         echo3 = 0;
         #20 reset = 0;  // Libera o reset após 20ns
         #100_000; // Espera 100us para início de operação do Sonar
-        ligar = 1; // Liga o circuito
 
         for (i = 0; i < 4; i = i + 1) begin
             $display("Caso");
+            #20 ligar = 1;
+            #20 ligar = 0; // Liga o circuito
+
+
             wait(trigger1 == 1);
             #400_000; // tempo entre trigger e echo
 
@@ -67,7 +70,7 @@ module roberto_tb;
             wait(pronto == 1); // Espera final do ciclo
         end
 
-        ligar = 0;
+        ligar = 1;
         #100_000; // espera 100us antes de finalizar 
         $stop;
     end
