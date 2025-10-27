@@ -1,0 +1,20 @@
+# Ignora cache do Python
+__pycache__/
+*.py[cod]
+
+# Ignora ambientes virtuais
+venv/
+env/
+
+# Ignora arquivos temporários do sistema
+*.log
+*.tmp
+*.swp
+
+# Ignora arquivos de configuração do VSCode
+.vscode/
+.idea/
+
+# Ignora build/output
+dist/
+build/

@@ -1,0 +1,33 @@
+/* ===== Estilo geral ===== */
+QWidget {
+    background-color: #1E1E2E;
+    color: #F8F8F2;
+    font-family: "Segoe UI";
+}
+
+/* ===== Título e textos ===== */
+QLabel {
+    font-size: 36px;
+    font-weight: bold;
+    color: #FFB86C;
+}
+
+/* ===== Botões ===== */
+QPushButton {
+    background-color: #6272A4;
+    color: white;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: 2px solid #44475A;
+}
+
+QPushButton:hover {
+    background-color: #7085C0;
+}
+
+QPushButton:pressed {
+    background-color: #44475A;
+    border: 2px solid #BD93F9;
+}
