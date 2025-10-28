@@ -4,6 +4,7 @@ from .tela_config_serial import SerialConfigDialog
 
 class TelaInicial(QWidget):
     start_game_signal = pyqtSignal()  # sinal emitido ao clicar em "Iniciar Jogo"
+    open_tutorial_signal = pyqtSignal()  # sinal emitido ao clicar em "Tutorial"
 
     def __init__(self, serial_logic):
         super().__init__()
@@ -21,9 +22,14 @@ class TelaInicial(QWidget):
         self.btn_config_serial.setMaximumWidth(500)
         self.btn_config_serial.setMinimumHeight(60)
 
+        self.btn_tutorial = QPushButton("📖 Tutorial")
+        self.btn_tutorial.setMaximumWidth(500)
+        self.btn_tutorial.setMinimumHeight(60)
+
         # Ligações dos botões
         self.btn_iniciar.clicked.connect(self.start_game_signal.emit)
         self.btn_config_serial.clicked.connect(self.abrir_config_serial)
+        self.btn_tutorial.clicked.connect(self.open_tutorial_signal.emit)
 
         # Layout horizontal (botões)
         layout_but = QHBoxLayout()
@@ -31,6 +37,8 @@ class TelaInicial(QWidget):
         layout_but.addWidget(self.btn_iniciar)
         layout_but.addSpacing(30)
         layout_but.addWidget(self.btn_config_serial)
+        layout_but.addSpacing(30)
+        layout_but.addWidget(self.btn_tutorial)
         layout_but.addStretch()
 
         # Layout principal (vertical)

@@ -2,16 +2,17 @@ from PyQt6.QtCore import QObject, QTimer, pyqtSignal
 import time
 
 class GameLogic(QObject):
-    next_level_signal = pyqtSignal(int, str)  # envia número e descrição da fase
-    correct_answer_signal = pyqtSignal(str)   # envia mensagem de acerto
+    next_level_signal = pyqtSignal(int, str, str)  # envia número e descrição da fase
+    correct_answer_signal = pyqtSignal(str, str)   # envia mensagem de acerto
+    wrong_answer_signal = pyqtSignal(str, str)   # envia mensagem de erro
 
     def __init__(self, serial_logic):
         super().__init__()
         self.serial_logic = serial_logic
         self.levels = [
-            {"id": 1, "texto": "Fase 1: Menino + Sorvete = Feliz", "resposta": "444"},
-            {"id": 2, "texto": "Fase 2: Menina + Balão = Alegre",  "resposta": "444"},
-            {"id": 3, "texto": "Fase 3: Menino + Chuva = Triste",  "resposta": "444"},
+            {"id": 1, "texto": "Fase 1: Menino + Sorvete = Feliz", "imagem": "assets/imagens/mewing.jpeg", "resposta": "444"},
+            {"id": 2, "texto": "Fase 2: Menina + Balão = Alegre", "imagem": "assets/imagens/GG.jpg", "resposta": "111"},
+            {"id": 3, "texto": "Fase 3: Menino + Chuva = Triste", "imagem": "assets/imagens/nivel1.png", "resposta": "444"},
         ]
         self.current_level = 0
         self.timer = QTimer()
@@ -30,7 +31,7 @@ class GameLogic(QObject):
         self.current_level = level_num - 1
         level = self.levels[self.current_level]
         print(f"Iniciando {level['texto']}")
-        self.next_level_signal.emit(level["id"], level["texto"])
+        self.next_level_signal.emit(level["id"], level["texto"], level['imagem'])
         self.timer.start(200)
 
     def ler_dados(self):
@@ -48,13 +49,17 @@ class GameLogic(QObject):
             print("✅ Resposta correta!")
             self.timer.stop()
             self.mostrar_acertou()
+        else:
+            print("❌ Resposta incorreta.")
+            self.mostrar_errou()
+        
 
     def avancar_nivel(self):
         """Passa para o próximo nível"""
         self.current_level += 1
         if self.current_level < len(self.levels):
             next_level = self.levels[self.current_level]
-            self.next_level_signal.emit(next_level["id"], next_level["texto"])
+            self.next_level_signal.emit(next_level["id"], next_level["texto"], next_level['imagem'])
             self.timer.start(200)
         else:
             print("🎉 Jogo concluído!")
@@ -62,8 +67,13 @@ class GameLogic(QObject):
 
     def mostrar_acertou(self):
         """Apresenta tela de acerto"""
-        self.correct_answer_signal.emit("🎉 Acertou!")
+        self.correct_answer_signal.emit("🎉 Acertou!", "assets/imagens/mewing.jpeg")
         QTimer.singleShot(1000, self.avancar_nivel)
+
+    def mostrar_errou(self):
+        """Apresenta tela de erro"""
+        self.wrong_answer_signal.emit("Quase lá, tente novamente!", "assets/imagens/foi mal.jpg")
+        QTimer.singleShot(1000, lambda: self.start_level(self.current_level+1))
 
     def discretizar(self, valor):
         """Discretiza o valor recebido"""

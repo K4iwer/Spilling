@@ -31,3 +31,19 @@ QPushButton:pressed {
     background-color: #44475A;
     border: 2px solid #BD93F9;
 }
+
+/* ===== Barra de progresso ===== */
+QProgressBar {
+    border: 2px solid #555;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: white;
+    background-color: #ccc;
+    font-size: 18px;
+}
+
+QProgressBar::chunk {
+    background-color: #4CAF50; /* verde */
+    border-radius: 10px;
+}
