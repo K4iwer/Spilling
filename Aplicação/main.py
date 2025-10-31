@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QApplication, QStackedWidget
 from UI.tela_inicial import TelaInicial
 from UI.tela_jogo import TelaJogo
 from UI.tela_tutorial import TelaTutorial
+from UI.tela_vitoria import TelaVitoria
 from PyQt6.QtCore import Qt
 import sys
 from core.serial_manager import SerialLogic
@@ -16,11 +17,13 @@ class MainWindow(QStackedWidget):
         self.tela_inicial = TelaInicial(self.serial_logic)
         self.tela_jogo = TelaJogo(self.serial_logic)
         self.tela_tutorial = TelaTutorial()
+        self.tela_vitoria = TelaVitoria()
 
         # Adiciona ao QStackedWidget
         self.addWidget(self.tela_inicial)
         self.addWidget(self.tela_jogo)
         self.addWidget(self.tela_tutorial)
+        self.addWidget(self.tela_vitoria)
 
         # Define tela inicial
         self.setCurrentWidget(self.tela_inicial)
@@ -31,9 +34,13 @@ class MainWindow(QStackedWidget):
         # Abrir tutorial
         self.tela_inicial.open_tutorial_signal.connect(self.abrir_tutorial)
 
+        # Conecta sinal de vitória
+        self.tela_jogo.game_logic.win_game_signal.connect(self.abrir_vitoria)
+
         # Voltar ao menu
         self.tela_jogo.voltar_menu_signal.connect(self.abrir_menu)
         self.tela_tutorial.voltar_menu_signal.connect(self.abrir_menu)
+        self.tela_vitoria.voltar_menu_signal.connect(self.abrir_menu)
 
     def abrir_jogo(self):
         self.setCurrentWidget(self.tela_jogo)
@@ -44,6 +51,9 @@ class MainWindow(QStackedWidget):
 
     def abrir_tutorial(self):
         self.setCurrentWidget(self.tela_tutorial)
+
+    def abrir_vitoria(self):
+        self.setCurrentWidget(self.tela_vitoria)
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key.Key_Escape:

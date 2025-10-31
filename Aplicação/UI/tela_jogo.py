@@ -28,12 +28,13 @@ class TelaJogo(QWidget):
 
         # Layout
         layout = QVBoxLayout()
-        layout.addSpacing(300)
+        layout.addStretch()
         layout.addWidget(self.label_fase)
         layout.addWidget(self.image_label)
-        layout.addSpacing(200)
+        layout.addStretch()
         layout.addWidget(self.progress_bar, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.btn_voltar, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addStretch()
         self.setLayout(layout)
 
         # Game Logic

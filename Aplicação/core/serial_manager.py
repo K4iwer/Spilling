@@ -28,13 +28,25 @@ class SerialLogic:
             return False, f"❌ Erro ao conectar: {e}"
 
     def read_serial(self):
-        """Lê uma linha da porta serial, se disponível."""
+        """Lê uma linha da porta serial, se disponível"""
         try: 
             if self.ser and self.ser.in_waiting > 0:
                 data = self.ser.readline().decode(errors='ignore').strip()
                 return data
         except Exception as e:
             return f"Erro na leitura: {e}"
+        
+    def send_serial(self, mensagem: str):
+        """Envia uma mensagem pela porta serial"""
+        try:
+            if self.ser and self.ser.is_open:
+                self.ser.write(mensagem.encode())
+                print(f"📤 Enviado: {mensagem}")
+            else:
+                print("⚠️ Porta serial não está aberta.")
+        except Exception as e:
+            print(f"❌ Erro ao enviar dados: {e}")
+
 
     def close(self):
         """Fecha a porta serial."""

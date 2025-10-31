@@ -5,14 +5,15 @@ class GameLogic(QObject):
     next_level_signal = pyqtSignal(int, str, str)  # envia número e descrição da fase
     correct_answer_signal = pyqtSignal(str, str)   # envia mensagem de acerto
     wrong_answer_signal = pyqtSignal(str, str)   # envia mensagem de erro
+    win_game_signal = pyqtSignal()
 
     def __init__(self, serial_logic):
         super().__init__()
         self.serial_logic = serial_logic
         self.levels = [
             {"id": 1, "texto": "Fase 1: Menino + Sorvete = Feliz", "imagem": "assets/imagens/mewing.jpeg", "resposta": "444"},
-            {"id": 2, "texto": "Fase 2: Menina + Balão = Alegre", "imagem": "assets/imagens/GG.jpg", "resposta": "111"},
-            {"id": 3, "texto": "Fase 3: Menino + Chuva = Triste", "imagem": "assets/imagens/nivel1.png", "resposta": "444"},
+            {"id": 2, "texto": "Fase 2: Menina + Balão = Alegre", "imagem": "assets/imagens/GG.jpg", "resposta": "444"},
+            {"id": 3, "texto": "Fase 3: Menino + Chuva = Triste", "imagem": "assets/imagens/meta.jpg", "resposta": "444"},
         ]
         self.current_level = 0
         self.timer = QTimer()
@@ -45,6 +46,8 @@ class GameLogic(QObject):
         print("Tratado: ", dado)
         expected = self.levels[self.current_level]["resposta"]
 
+        self.serial_logic.send_serial(dado)
+
         if dado.strip() == expected:
             print("✅ Resposta correta!")
             self.timer.stop()
@@ -63,7 +66,7 @@ class GameLogic(QObject):
             self.timer.start(200)
         else:
             print("🎉 Jogo concluído!")
-            self.game_on = False
+            self.ganhou_jogo()
 
     def mostrar_acertou(self):
         """Apresenta tela de acerto"""
@@ -74,6 +77,11 @@ class GameLogic(QObject):
         """Apresenta tela de erro"""
         self.wrong_answer_signal.emit("Quase lá, tente novamente!", "assets/imagens/foi mal.jpg")
         QTimer.singleShot(1000, lambda: self.start_level(self.current_level+1))
+
+    def ganhou_jogo(self):
+        """Indica vitória do jogo"""
+        self.game_on = False
+        self.win_game_signal.emit()
 
     def discretizar(self, valor):
         """Discretiza o valor recebido"""
