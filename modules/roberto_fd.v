@@ -2,6 +2,7 @@ module roberto_fd (
     input  wire clock,
     input  wire zera_sensor,
     input  wire zera_serial,
+    input  wire zera_recpcao,
     input  wire zera_seg,
     input  wire zera_2,
     input  wire cont_seg,
@@ -12,7 +13,11 @@ module roberto_fd (
     input  wire echo3,  
     input  wire partida_tx,
     input  wire zera_3,
-    input  wire cont_3,  
+    input  wire cont_3,
+    input  wire RX,
+    input  wire cont_recepcao,
+    output wire [6:0] recpcao_serial, // mudar pra saída do mux
+    output wire pronto_recepcao,  
     output wire [1:0] Q_3,
     output wire trigger1, 
     output wire trigger2, 
@@ -21,6 +26,10 @@ module roberto_fd (
     output wire pronto_serial, 
     output wire pronto_seg, 
     output wire [1:0] Q_2,
+    output wire [1:0] Q_recepcao,
+    output wire [6:0] dado_recebido_1,
+    output wire [6:0] dado_recebido_2,
+    output wire [6:0] dado_recebido_3,
     output wire [11:0] db_medida1,
     output wire [11:0] db_medida2,
     output wire [11:0] db_medida3
@@ -37,7 +46,13 @@ module roberto_fd (
     wire [6:0]  s_entr_serial;
     wire [1:0]  s_Q_2;
     wire [1:0]  s_Q_3;
-
+    wire carrega_reg_1;
+    wire carrega_reg_2;
+    wire carrega_reg_3;
+    wire [1:0] s_Q_recepcao;
+    wire [6:0] dado_recebido_1;
+    wire [6:0] dado_recebido_2;
+    wire [6:0] dado_recebido_3;
 
     /******************* Medição da distância **********************/ 
 
@@ -147,8 +162,69 @@ module roberto_fd (
         .db_estado      (             )
     );
 
-    /******************* Contadores **********************/ 
+    /**************** Recepção Serial **********************/
 
+    // Receptor serial 7E1
+    rx_serial_7E1 RECEPCAO_SERIAL (
+        .clock       (clock             ),
+        .reset       (zera_recpcao      ),
+        .RX          (RX                ),
+        .dados_ascii (recpcao_serial    ), // não usado
+        .pronto      (pronto_recepcao   ), // não usado
+        .db_dados    (             ), // não usado
+        .db_estado   (             )  // não usado
+    );
+
+    /******************* Registradores **********************/
+
+    // Reg de recepção serial 1
+    registrador_n #(
+        .N(7)
+    ) recepcao_serial_1 (
+        .clock   ( clock              ),
+        .reset   ( zera_recpcao       ),
+        .carrega ( carrega_reg_1      ),
+        .D       ( recpcao_serial     ),
+        .Q       ( dado_recebido_1    )
+    );
+
+    // Reg de recepção serial 2
+    registrador_n #(
+        .N(7)
+    ) recepcao_serial_2 (
+        .clock   ( clock              ),
+        .reset   ( zera_recpcao       ),
+        .carrega ( carrega_reg_2      ),
+        .D       ( recpcao_serial     ),
+        .Q       ( dado_recebido_2    )
+    );
+
+    // Reg de recepção serial 3
+    registrador_n #(
+        .N(7)
+    ) recepcao_serial_3 (
+        .clock   ( clock              ),
+        .reset   ( zera_recpcao       ),
+        .carrega ( carrega_reg_3      ),
+        .D       ( recpcao_serial     ),
+        .Q       ( dado_recebido_3    )
+    );
+
+    /******************* Contadores **********************/ 
+    // Contador até 3 pra recepção serial
+    contador_m #(
+        .M(4),
+        .N(2)
+    ) contador_ate_3_recepcao (
+        .clock  (clock          ),
+        .zera_as(               ),
+        .zera_s (zera_recpcao   ),
+        .conta  (cont_recepcao  ),
+        .Q      (s_Q_recepcao   ), 
+        .fim    (               ),
+        .meio   (               )
+    );
+    
     // Contador de 1 segundo
     contador_m #(
         .M(1_000_000),  // 50_000_000
@@ -194,6 +270,10 @@ module roberto_fd (
 
     assign Q_2 = s_Q_2;
     assign Q_3 = s_Q_3;
+    assign Q_recepcao = s_Q_recepcao;
+    assign carrega_reg_1 = pronto_recepcao & (s_Q_recepcao == 2'b00);
+    assign carrega_reg_2 = pronto_recepcao & (s_Q_recepcao == 2'b01);
+    assign carrega_reg_3 = pronto_recepcao & (s_Q_recepcao == 2'b10);
     assign db_medida1 = s_medida1;
     assign db_medida2 = s_medida2;
     assign db_medida3 = s_medida3;

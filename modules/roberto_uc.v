@@ -5,12 +5,16 @@ module roberto_uc (
     input wire pronto_seg,
     input wire [1:0] Q_2,
     input wire [1:0] Q_3,
+    input wire [1:0] Q_recepcao,
     input wire pronto_serial,
+    input wire pronto_recepcao,
     output reg cont_2,
     output reg cont_3,
     output reg zera_2,
     output reg zera_3,
+    output reg zera_recpcao
     output reg partida_tx,
+    output reg cont_recepcao,
     output reg medir,
     output reg zera_sensor,
     output reg zera_serial,
@@ -27,7 +31,10 @@ parameter esp_seg       = 4'b0010;
 parameter envia         = 4'b0011;
 parameter proxEnvio     = 4'b0100;
 parameter proxSensor    = 4'b0101;
-parameter est_final     = 4'b0110;
+parameter espera_recep  = 4'b0110;
+parameter proxRecpcao   = 4'b0111;
+
+parameter est_final     = 4'b0111;
 
 /******************* Variáveis de estado **********************/ 
 
@@ -51,7 +58,9 @@ always @* begin
         esp_seg:        Eprox = pronto_seg ? envia : esp_seg;
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
         proxEnvio:      Eprox = (Q_3 == 2'b11) ? proxSensor : envia;
-        proxSensor:     Eprox = (Q_2 == 2'b10) ? est_final : envia;
+        proxSensor:     Eprox = (Q_2 == 2'b10) ? espera_recep : envia;
+        espera_recep:   Eprox = pronto_recepcao ? proxRecpcao : espera_recep;
+        proxRecepcao:   Eprox = (Q_recepcao == 2'b10) ? est_final : espera_recep;
         est_final:      Eprox = inicial;
         default:        Eprox = inicial;
     endcase
@@ -60,6 +69,7 @@ end
 /******************* Lógica de saída (Moore) **********************/ 
 
 always @* begin
+    zera_recpcao = 1'b0;
     zera_sensor = 1'b0;
     zera_serial = 1'b0;
     zera_seg = 1'b0;
@@ -79,6 +89,7 @@ always @* begin
             zera_seg = 1'b1;
             zera_2 = 1'b1;
             zera_3 = 1'b1;
+            zera_recpcao = 1'b1;
         end
         est_medir: begin
             medir = 1'b1;
@@ -95,6 +106,10 @@ always @* begin
         proxSensor: begin
             cont_2 = 1'b1;
             zera_3 = 1'b1;
+        end
+        proxRecepcao begin
+            cont_recepcao = 1'b1;
+
         end
         est_final: begin
             zera_2 = 1'b1;
