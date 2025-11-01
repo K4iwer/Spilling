@@ -12,7 +12,7 @@ module roberto_uc (
     output reg cont_3,
     output reg zera_2,
     output reg zera_3,
-    output reg zera_recpcao
+    output reg zera_recpcao,
     output reg partida_tx,
     output reg cont_recepcao,
     output reg medir,
@@ -32,9 +32,9 @@ parameter envia         = 4'b0011;
 parameter proxEnvio     = 4'b0100;
 parameter proxSensor    = 4'b0101;
 parameter espera_recep  = 4'b0110;
-parameter proxRecpcao   = 4'b0111;
+parameter proxRecepcao   = 4'b0111;
 
-parameter est_final     = 4'b0111;
+parameter est_final     = 4'b1000;
 
 /******************* Variáveis de estado **********************/ 
 
@@ -59,7 +59,7 @@ always @* begin
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
         proxEnvio:      Eprox = (Q_3 == 2'b11) ? proxSensor : envia;
         proxSensor:     Eprox = (Q_2 == 2'b10) ? espera_recep : envia;
-        espera_recep:   Eprox = pronto_recepcao ? proxRecpcao : espera_recep;
+        espera_recep:   Eprox = pronto_recepcao ? proxRecepcao : espera_recep;
         proxRecepcao:   Eprox = (Q_recepcao == 2'b10) ? est_final : espera_recep;
         est_final:      Eprox = inicial;
         default:        Eprox = inicial;
@@ -107,7 +107,7 @@ always @* begin
             cont_2 = 1'b1;
             zera_3 = 1'b1;
         end
-        proxRecepcao begin
+        proxRecepcao: begin
             cont_recepcao = 1'b1;
 
         end

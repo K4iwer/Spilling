@@ -43,9 +43,9 @@ module roberto (
     wire [11:0] s_db_medida1; 
     wire [11:0] s_db_medida2; 
     wire [11:0] s_db_medida3;
-    wire [6:0] db_medida1,
-    wire [6:0] db_medida2,
-    wire [6:0] db_medida3
+    wire [6:0] db_medida1;
+    wire [6:0] db_medida2;
+    wire [6:0] db_medida3;
     wire [6:0] s_db_entrada_serial_1;
     wire [6:0] s_db_entrada_serial_2;
     wire [6:0] s_db_entrada_serial_3;

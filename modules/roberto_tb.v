@@ -7,17 +7,20 @@ module roberto_tb;
     reg echo1;
     reg echo2;
     reg echo3;
+    reg rx_serial; // Sinal para recepção serial
     wire trigger1;
     wire trigger2;
     wire trigger3;
     wire saida_serial;
     wire pronto;
 
-
     parameter clockPeriod = 20; // Clock de 50MHz
     always # (clockPeriod/2) clock = ~clock;
     reg [31:0] casos_teste [0:7];
     integer i;
+
+    // Variável para o período de um bit no protocolo 7E1
+    real bit_period;
 
     roberto DUT (
         .clock(clock),
@@ -26,6 +29,7 @@ module roberto_tb;
         .echo1(echo1),
         .echo2(echo2),
         .echo3(echo3),
+        .RX(rx_serial), // Conexão para recepção serial
         .trigger1(trigger1),
         .trigger2(trigger2),
         .trigger3(trigger3),
@@ -47,6 +51,7 @@ module roberto_tb;
         echo1 = 0;
         echo2 = 0;
         echo3 = 0;
+        rx_serial = 1; // Linha de recepção inicializada em idle (nível alto)
         #20 reset = 0;  // Libera o reset após 20ns
         #100_000; // Espera 100us para início de operação do Sonar
 
@@ -55,11 +60,9 @@ module roberto_tb;
             #20 ligar = 1;
             #20 ligar = 0; // Liga o circuito
 
-
             wait(trigger1 == 1);
             #400_000; // tempo entre trigger e echo
 
-            
             echo1 = 1; // Gera pulso Echo com largura definida no caso de teste
             echo2 = 1; // Gera pulso Echo com largura definida no caso de teste
             echo3 = 1; // Gera pulso Echo com largura definida no caso de teste
@@ -69,10 +72,50 @@ module roberto_tb;
             echo3 = 0;
             wait(pronto == 1); // Espera final do ciclo
         end
+        #100_000; // espera 100us antes de testar a recepção serial
 
-        ligar = 1;
-        #100_000; // espera 100us antes de finalizar 
-        $stop;
+        // A partir daqui foi o gpt
+        // Teste de recepção serial
+        $display("Teste de recepção serial");
+
+        // Define o período de um bit para o baud rate de 115000
+        bit_period = 1_000_000_000 / 115000; // em nanosegundos
+
+        // Envia três palavras no protocolo 7E1
+        enviar_palavra_serial(8'b10101010, bit_period); // Primeira palavra
+        #(bit_period * 10); // Tempo entre palavras
+        enviar_palavra_serial(8'b11001100, bit_period); // Segunda palavra
+        #(bit_period * 10); // Tempo entre palavras
+        enviar_palavra_serial(8'b11110000, bit_period); // Terceira palavra
+
+        $display("Recepção serial concluída");
+
+        $stop; // Finaliza a simulação
     end
 
+    // Tarefa para enviar uma palavra no protocolo 7E1
+    task enviar_palavra_serial;
+        input [7:0] palavra;
+        input real bit_period;
+        integer j;
+        begin
+            // Envia bit de start (nível baixo)
+            rx_serial = 0;
+            #(bit_period);
+
+            // Envia 7 bits de dados (LSB primeiro)
+            for (j = 0; j < 7; j = j + 1) begin
+                rx_serial = palavra[j];
+                #(bit_period);
+            end
+
+            // Envia bit de paridade (paridade par)
+            rx_serial = ~^palavra[6:0];
+            #(bit_period);
+
+            // Envia bit de stop (nível alto)
+            rx_serial = 1;
+            #(bit_period);
+        end
+    endtask
 endmodule

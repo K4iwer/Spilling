@@ -50,9 +50,6 @@ module roberto_fd (
     wire carrega_reg_2;
     wire carrega_reg_3;
     wire [1:0] s_Q_recepcao;
-    wire [6:0] dado_recebido_1;
-    wire [6:0] dado_recebido_2;
-    wire [6:0] dado_recebido_3;
 
     /******************* Medição da distância **********************/ 
 
