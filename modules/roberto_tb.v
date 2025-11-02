@@ -76,11 +76,11 @@ module roberto_tb;
 
             #(bit_period * 2500);
 
-            enviar_palavra_serial(8'b10101010, bit_period); // Primeira palavra
+            enviar_palavra_serial(7'b011_0000, bit_period); // Primeira palavra
             #(bit_period * 10); // Tempo entre palavras
-            enviar_palavra_serial(8'b11001100, bit_period); // Segunda palavra
+            enviar_palavra_serial(7'b011_0001, bit_period); // Segunda palavra
             #(bit_period * 10); // Tempo entre palavras
-            enviar_palavra_serial(8'b11110000, bit_period); // Terceira palavra
+            enviar_palavra_serial(7'b011_0010, bit_period); // Terceira palavra
 
         end
         #100_000; 
@@ -92,7 +92,7 @@ module roberto_tb;
 
     // Tarefa para enviar uma palavra no protocolo 7E1
     task enviar_palavra_serial;
-        input [7:0] palavra;
+        input [6:0] palavra;
         input real bit_period;
         integer j;
         begin
