@@ -103,20 +103,20 @@ module rx_serial_7E1 (
      assign dados_ascii = s_dados_ascii;
 
     // hexa0
-    hexa7seg HEX5 ( 
-        .hexa    ( s_estado  ), 
-        .display ( db_estado )
-    );
+    // hexa7seg HEX5 ( 
+    //     .hexa    ( s_estado  ), 
+    //     .display ( db_estado )
+    // );
      
-     hexa7seg HEX0 ( 
-        .hexa    ( s_dados_ascii [3:0] ), 
-        .display ( db_dados [6:0]      )
-    );
+    //  hexa7seg HEX0 ( 
+    //     .hexa    ( s_dados_ascii [3:0] ), 
+    //     .display ( db_dados [6:0]      )
+    // );
      
-     hexa7seg HEX1 ( 
-        .hexa    ( s_dados_ascii [7:4] ), 
-        .display ( db_dados [13:7]     )
-    );
+    //  hexa7seg HEX1 ( 
+    //     .hexa    ( s_dados_ascii [7:4] ), 
+    //     .display ( db_dados [13:7]     )
+    // );
 
     // saidas de depuracao
     assign db_clock = clock; 
