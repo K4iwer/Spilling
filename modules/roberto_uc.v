@@ -68,7 +68,7 @@ end
 
 /******************* Lógica de saída (Moore) **********************/ 
 
-always @* begin
+always @(*) begin
     zera_recpcao = 1'b0;
     zera_sensor = 1'b0;
     zera_serial = 1'b0;
@@ -81,6 +81,7 @@ always @* begin
     cont_3 = 1'b0;
     cont_seg = 1'b0;
     pronto = 1'b0;
+    cont_recepcao = 1'b0;
 
     case (Eatual)
         inicial: begin

@@ -46,7 +46,7 @@ module rx_serial_7E1 (
     assign s_reset  = reset;
      
     // fluxo de dados
-    rx_serial_8N1_fd U1_FD (
+    rx_serial_7E1_fd U1_FD (
         .clock       ( clock         ),
         .reset       ( s_reset       ),
         .zera        ( s_zera        ),

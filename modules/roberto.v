@@ -46,9 +46,9 @@ module roberto (
     wire [6:0] db_medida1;
     wire [6:0] db_medida2;
     wire [6:0] db_medida3;
-    wire [6:0] s_db_entrada_serial_1;
-    wire [6:0] s_db_entrada_serial_2;
-    wire [6:0] s_db_entrada_serial_3;
+    wire [6:0] db_entrada_serial_1;
+    wire [6:0] db_entrada_serial_2;
+    wire [6:0] db_entrada_serial_3;
     wire [6:0] s_dado_recebido_1;
     wire [6:0] s_dado_recebido_2;
     wire [6:0] s_dado_recebido_3;
@@ -61,7 +61,7 @@ module roberto (
         .clock         (clock           ),
         .zera_sensor   (s_zera_sensor   ),
         .zera_serial   (s_zera_serial   ),
-        .zera_recpcao  (s_zera_recpcao  ),
+        .zera_recpcao  (s_zera_recepcao ),
         .cont_seg      (s_cont_seg      ),
         .zera_seg      (s_zera_seg      ),
         .cont_2        (s_cont_2        ),
@@ -86,10 +86,12 @@ module roberto (
         .Q_recepcao    (s_Q_recepcao    ),
         .pronto_recepcao(s_pronto_recepcao ),
         .cont_recepcao (s_cont_recepcao ),
+        .dado_recebido_1(s_dado_recebido_1  ),
+        .dado_recebido_2(s_dado_recebido_2  ),
+        .dado_recebido_3(s_dado_recebido_3  ),
         .db_medida1    (s_db_medida1    ),
         .db_medida2    (s_db_medida2    ),
         .db_medida3    (s_db_medida3    )
-        // .db_estado_ult (s_db_ult        )
     );
 
     
@@ -108,6 +110,7 @@ module roberto (
         .cont_3         (s_cont_3           ),
         .zera_2         (s_zera_2           ),
         .zera_3         (s_zera_3           ),
+        .zera_recpcao   (s_zera_recepcao    ),
         .partida_tx     (s_partida_tx       ),
         .medir          (s_medir            ),
         .zera_sensor    (s_zera_sensor      ),
@@ -115,9 +118,6 @@ module roberto (
         .zera_seg       (s_zera_seg         ),
         .cont_seg       (s_cont_seg         ),
         .pronto         (pronto             ),
-        .dado_recebido_1(s_dado_recebido_1  ),
-        .dado_recebido_2(s_dado_recebido_2  ),
-        .dado_recebido_3(s_dado_recebido_3  ),
         .db_estado      (s_db_estado        )
     );
 

@@ -16,7 +16,7 @@ module roberto_fd (
     input  wire cont_3,
     input  wire RX,
     input  wire cont_recepcao,
-    output wire [6:0] recpcao_serial, // mudar pra saída do mux
+    output wire [6:0] recepcao_serial, // mudar pra saída do mux
     output wire pronto_recepcao,  
     output wire [1:0] Q_3,
     output wire trigger1, 
@@ -166,7 +166,7 @@ module roberto_fd (
         .clock       (clock             ),
         .reset       (zera_recpcao      ),
         .RX          (RX                ),
-        .dados_ascii (recpcao_serial    ), // não usado
+        .dados_ascii (recepcao_serial    ), // não usado
         .pronto      (pronto_recepcao   ), // não usado
         .db_dados    (             ), // não usado
         .db_estado   (             )  // não usado
@@ -179,9 +179,9 @@ module roberto_fd (
         .N(7)
     ) recepcao_serial_1 (
         .clock   ( clock              ),
-        .reset   ( zera_recpcao       ),
-        .carrega ( carrega_reg_1      ),
-        .D       ( recpcao_serial     ),
+        .clear   ( zera_recpcao       ),
+        .enable  ( carrega_reg_1      ),
+        .D       ( recepcao_serial     ),
         .Q       ( dado_recebido_1    )
     );
 
@@ -190,9 +190,9 @@ module roberto_fd (
         .N(7)
     ) recepcao_serial_2 (
         .clock   ( clock              ),
-        .reset   ( zera_recpcao       ),
-        .carrega ( carrega_reg_2      ),
-        .D       ( recpcao_serial     ),
+        .clear   ( zera_recpcao       ),
+        .enable  ( carrega_reg_2      ),
+        .D       ( recepcao_serial     ),
         .Q       ( dado_recebido_2    )
     );
 
@@ -201,9 +201,9 @@ module roberto_fd (
         .N(7)
     ) recepcao_serial_3 (
         .clock   ( clock              ),
-        .reset   ( zera_recpcao       ),
-        .carrega ( carrega_reg_3      ),
-        .D       ( recpcao_serial     ),
+        .clear   ( zera_recpcao       ),
+        .enable  ( carrega_reg_3      ),
+        .D       ( recepcao_serial     ),
         .Q       ( dado_recebido_3    )
     );
 
