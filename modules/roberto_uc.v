@@ -25,14 +25,14 @@ module roberto_uc (
 );
 
 /******************* Estados **********************/ 
-parameter inicial       = 4'b0000;
-parameter est_medir     = 4'b0001;
-parameter esp_seg       = 4'b0010;
-parameter envia         = 4'b0011;
-parameter proxEnvio     = 4'b0100;
-parameter proxSensor    = 4'b0101;
-parameter espera_recep  = 4'b0110;
-parameter proxRecepcao   = 4'b0111;
+parameter inicial       = 4'b0000; //0
+parameter est_medir     = 4'b0001; //1
+parameter esp_seg       = 4'b0010; //2
+parameter envia         = 4'b0011; //3
+parameter proxEnvio     = 4'b0100; //4
+parameter proxSensor    = 4'b0101; //5
+parameter espera_recep  = 4'b0110; //6
+parameter proxRecepcao  = 4'b0111; //7
 
 parameter est_final     = 4'b1000;
 
@@ -123,13 +123,15 @@ end
 /******************* Saída de depuração (estados) **********************/ 
 always @* begin
     case(Eatual)
-        inicial:    db_estado = 4'b0000;
-        est_medir:  db_estado = 4'b0001;
-        esp_seg:    db_estado = 4'b0010;
-        envia:      db_estado = 4'b0011;
-        proxEnvio:  db_estado = 4'b0100;
-        proxSensor: db_estado = 4'b0101;
-        est_final:  db_estado = 4'b0110;
+        inicial:    db_estado = 4'b0000; //0
+        est_medir:  db_estado = 4'b0001; //1
+        esp_seg:    db_estado = 4'b0010; //2
+        envia:      db_estado = 4'b0011; //3
+        proxEnvio:  db_estado = 4'b0100; //4
+        proxSensor: db_estado = 4'b0101; //5
+        espera_recep:db_estado = 4'b0110; //6
+        proxRecepcao:db_estado = 4'b0111; //7
+        est_final:  db_estado = 4'b1000; //8
         default:    db_estado = 4'b0111; // erro
     endcase
 end

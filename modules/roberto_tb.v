@@ -43,6 +43,8 @@ module roberto_tb;
         casos_teste[1] = 5899;  // 5899us = 100,29cm (truncar para 100cm)
         casos_teste[2] = 4353;  // 4353us = 74cm
         casos_teste[3] = 4399;  // 4399us = 74,79cm (arredondar para 75cm)
+        // Define o período de um bit para o baud rate de 115000
+        bit_period = 1_000_000_000 / 115000; // em nanosegundos
 
         // Valores iniciais
         clock = 0;
@@ -70,23 +72,24 @@ module roberto_tb;
             echo1 = 0;
             echo2 = 0;
             echo3 = 0;
+            
+            enviar_palavra_serial(8'b10101010, bit_period); // Primeira palavra
+            #(bit_period * 10); // Tempo entre palavras
+            enviar_palavra_serial(8'b11001100, bit_period); // Segunda palavra
+            #(bit_period * 10); // Tempo entre palavras
+            enviar_palavra_serial(8'b11110000, bit_period); // Terceira palavra
+
             wait(pronto == 1); // Espera final do ciclo
         end
         #100_000; // espera 100us antes de testar a recepção serial
 
         // A partir daqui foi o gpt
         // Teste de recepção serial
-        $display("Teste de recepção serial");
+        
 
-        // Define o período de um bit para o baud rate de 115000
-        bit_period = 1_000_000_000 / 115000; // em nanosegundos
+        
 
         // Envia três palavras no protocolo 7E1
-        enviar_palavra_serial(8'b10101010, bit_period); // Primeira palavra
-        #(bit_period * 10); // Tempo entre palavras
-        enviar_palavra_serial(8'b11001100, bit_period); // Segunda palavra
-        #(bit_period * 10); // Tempo entre palavras
-        enviar_palavra_serial(8'b11110000, bit_period); // Terceira palavra
 
         $display("Recepção serial concluída");
 
