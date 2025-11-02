@@ -1,36 +1,22 @@
-/* ---------------------------------------------------------------------
- * Arquivo   : rx_serial_uc.v
- * ---------------------------------------------------------------------
- * Descricao : unidade de controle do circuito de recepcao serial 
- * > implementa superamostragem (tick)
- * > independente da configuracao de recepcao (7O1, 8N2, etc)
- * ---------------------------------------------------------------------
- * Revisoes  :
- *     Data        Versao  Autor                 Descricao
- *     15/10/2024  5.0     Augusto Vaccarelli    conversao para receptor
- *     28/10/2024  5.1     Edson Midorikawa      ajustes no FSM
- * ---------------------------------------------------------------------
- */
-
 module rx_serial_uc ( 
-    input            clock    ,
-    input            reset    ,
-    input            RX       ,
-    input            tick     ,
-    input            fim      ,
-    input            par_ok   ,
-    output reg       registra ,
-    output reg       zera     ,
+    input            clock,
+    input            reset,
+    input            tick,
+    input            fim,
+    input            RX,
+    input            par_ok,
+    output reg       registra,
+    output reg       zera,
     output reg       zera_tick,
-    output reg       conta    ,
-    output reg       carrega  ,
-    output reg       desloca  ,
-    output reg       pronto   ,
+    output reg       conta,
+    output reg       carrega,
+    output reg       desloca,
+    output reg       pronto,
     output reg [3:0] db_estado,
     output reg       erro
 );
 
-    // Estados da UC
+    // Estados da FSM
     parameter inicial     = 4'b0000; 
     parameter preparacao  = 4'b0001;
     parameter espera      = 4'b0010; 
@@ -38,10 +24,9 @@ module rx_serial_uc (
     parameter registrar   = 4'b0100;
     parameter final_rx    = 4'b0101;
 
-    // Variaveis de estado
     reg [3:0] Eatual, Eprox;
 
-    // Memoria de estado
+    // Atualiza estado
     always @(posedge clock or posedge reset) begin
         if (reset)
             Eatual <= inicial;
@@ -49,12 +34,12 @@ module rx_serial_uc (
             Eatual <= Eprox;
     end
 
-    // Logica de proximo estado
-    always @* begin
+    // Lógica de próximo estado (combinacional)
+    always @(*) begin
         case (Eatual)
             inicial    : Eprox = RX ? inicial : preparacao;
             preparacao : Eprox = espera;
-            espera     : Eprox = tick ? recepcao : ( fim ? registrar : espera );
+            espera     : Eprox = tick ? recepcao : (fim ? registrar : espera);
             recepcao   : Eprox = espera;        
             registrar  : Eprox = final_rx;
             final_rx   : Eprox = inicial;
@@ -62,27 +47,65 @@ module rx_serial_uc (
         endcase
     end
 
-    // Logica de saida (maquina de Moore)
-    always @* begin
-        zera      = (Eatual == inicial) ? 1'b1 : 1'b0;
-        registra  = (Eatual == registrar) ? 1'b1 : 1'b0;
-        erro      = (Eatual == registrar && ~par_ok) ? 1'b1 : 1'b0;
-        carrega   = (Eatual == preparacao) ? 1'b1 : 1'b0;
-        desloca   = (Eatual == recepcao) ? 1'b1 : 1'b0;
-        conta     = (Eatual == recepcao) ? 1'b1 : 1'b0;
-        zera_tick = (Eatual == preparacao) ?  1'b1: 1'b0;
-        pronto    = (Eatual == final_rx) ? 1'b1 : 1'b0;
+    // Lógica de saída síncrona
+    always @(posedge clock or posedge reset) begin
+        if (reset) begin
+            zera      <= 1'b1;
+            registra  <= 1'b0;
+            erro      <= 1'b0;
+            carrega   <= 1'b0;
+            desloca   <= 1'b0;
+            conta     <= 1'b0;
+            zera_tick <= 1'b0;
+            pronto    <= 1'b0;
+            db_estado <= 4'b0000;
+        end else begin
+            // Saídas default
+            zera      <= 1'b0;
+            registra  <= 1'b0;
+            erro      <= 1'b0;
+            carrega   <= 1'b0;
+            desloca   <= 1'b0;
+            conta     <= 1'b0;
+            zera_tick <= 1'b0;
+            pronto    <= 1'b0;
 
-        // Saida de depuracao (estado)
-        case (Eatual)
-            inicial    : db_estado = 4'b0000; // 0
-            preparacao : db_estado = 4'b0001; // 1
-            espera     : db_estado = 4'b0010; // 2
-            recepcao   : db_estado = 4'b0011; // 3
-            registrar  : db_estado = 4'b0100; // 4
-            final_rx   : db_estado = 4'b1111; // F
-            default    : db_estado = 4'b1110; // E
-        endcase
+            // Definição por estado
+            case(Eatual)
+                inicial: begin
+                    zera <= 1'b1;
+                end
+                preparacao: begin
+                    carrega   <= 1'b1;
+                    zera_tick <= 1'b1;
+                end
+                espera: begin
+                    // nenhuma saída ativa
+                end
+                recepcao: begin
+                    desloca <= 1'b1;
+                    conta   <= 1'b1;
+                end
+                registrar: begin
+                    registra <= 1'b1;
+                    if (~par_ok) erro <= 1'b1;
+                end
+                final_rx: begin
+                    pronto <= 1'b1;
+                end
+            endcase
+
+            // Saída de depuração
+            case(Eatual)
+                inicial    : db_estado <= 4'b0000;
+                preparacao : db_estado <= 4'b0001;
+                espera     : db_estado <= 4'b0010;
+                recepcao   : db_estado <= 4'b0011;
+                registrar  : db_estado <= 4'b0100;
+                final_rx   : db_estado <= 4'b1111;
+                default    : db_estado <= 4'b1110;
+            endcase
+        end
     end
 
 endmodule

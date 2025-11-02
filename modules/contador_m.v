@@ -15,7 +15,7 @@
  */
 
 module contador_m #(parameter M=100, N=7)
-  (
+(
     input  wire          clock,
     input  wire          zera_as,
     input  wire          zera_s,
@@ -23,32 +23,36 @@ module contador_m #(parameter M=100, N=7)
     output reg  [N-1:0]  Q,
     output reg           fim,
     output reg           meio
-  );
+);
 
   always @(posedge clock or posedge zera_as) begin
     if (zera_as) begin
-      Q <= 0;
-    end else if (clock) begin
+      Q    <= 0;
+      fim  <= 0;
+      meio <= 0;
+    end 
+    else begin
       if (zera_s) begin
-        Q <= 0;
-      end else if (conta) begin
-        if (Q == M-1) begin
+        Q    <= 0;
+        fim  <= 0;
+        meio <= 0;
+      end 
+      else if (conta) begin
+        if (Q == M-1)
           Q <= 0;
-        end else begin
-          // Q <= Q + 1;
+        else
           Q <= Q + 1'b1;
-        end
+
+        // Atualiza as saídas de forma síncrona
+        fim  <= (Q == M-1);
+        meio <= (Q == (M/2 - 1));
+      end
+      else begin
+        // Mantém os valores se nada acontece
+        fim  <= 0;
+        meio <= 0;
       end
     end
   end
-
-  // Saidas
-  always @ (Q)
-      if (Q == M-1)   fim = 1;
-      else            fim = 0;
-
-  always @ (Q)
-      if (Q == M/2-1) meio = 1;
-      else            meio = 0;
 
 endmodule

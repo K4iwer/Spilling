@@ -58,6 +58,7 @@ module roberto_tb;
         #100_000; // Espera 100us para início de operação do Sonar
 
         for (i = 0; i < 4; i = i + 1) begin
+            #(bit_period * 200);
             $display("Caso");
             #20 ligar = 1;
             #20 ligar = 0; // Liga o circuito
@@ -72,24 +73,17 @@ module roberto_tb;
             echo1 = 0;
             echo2 = 0;
             echo3 = 0;
-            
+
+            #(bit_period * 2500);
+
             enviar_palavra_serial(8'b10101010, bit_period); // Primeira palavra
             #(bit_period * 10); // Tempo entre palavras
             enviar_palavra_serial(8'b11001100, bit_period); // Segunda palavra
             #(bit_period * 10); // Tempo entre palavras
             enviar_palavra_serial(8'b11110000, bit_period); // Terceira palavra
 
-            wait(pronto == 1); // Espera final do ciclo
         end
-        #100_000; // espera 100us antes de testar a recepção serial
-
-        // A partir daqui foi o gpt
-        // Teste de recepção serial
-        
-
-        
-
-        // Envia três palavras no protocolo 7E1
+        #100_000; 
 
         $display("Recepção serial concluída");
 
