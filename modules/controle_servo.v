@@ -8,10 +8,10 @@ module controle_servo (
 
 circuito_pwm #(
     .conf_periodo(1_000_000),
-    .largura_00(0),
-    .largura_01(50000),
-    .largura_10(75000),
-    .largura_11(100000)
+    .largura_000(50_000),
+    .largura_001(66_666),
+    .largura_010(83_333),
+    .largura_011(100_000),
 ) my_circuito_pwm (
     .clock(clock),
     .reset(reset),

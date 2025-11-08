@@ -14,6 +14,12 @@ module roberto (
     output wire trigger3,
     output wire saida_serial,
     output wire pronto,
+    output wire PMW1,
+    output wire PMW2,
+    output wire PMW3,
+    output wire db_PMW1,
+    output wire db_PMW2,
+    output wire db_PMW3,
     output wire [6:0] db_estado,
     // output wire [6:0] db_ult,
     output wire [6:0] db_hex1,
@@ -56,42 +62,49 @@ module roberto (
     wire        s_pronto_recepcao;
     wire [1:0]  s_Q_recepcao; 
     wire        s_cont_recepcao;
+    wire        s_PMW1;
+    wire        s_PMW2;
+    wire        s_PMW3;
 
     roberto_fd FD (
-        .clock         (clock           ),
-        .zera_sensor   (s_zera_sensor   ),
-        .zera_serial   (s_zera_serial   ),
-        .zera_recpcao  (s_zera_recepcao ),
-        .cont_seg      (s_cont_seg      ),
-        .zera_seg      (s_zera_seg      ),
-        .cont_2        (s_cont_2        ),
-        .Q_2           (s_Q_2           ),
-        .zera_2        (s_zera_2        ),
-        .Q_3           (s_Q_3           ),
-        .cont_3        (s_cont_3        ),
-        .zera_3        (s_zera_3        ),
-        .medir         (s_medir         ),
-        .echo1         (echo1           ),
-        .echo2         (echo2           ),
-        .echo3         (echo3           ),
-        .partida_tx    (s_partida_tx    ),
-        .trigger1      (trigger1        ),
-        .trigger2      (trigger2        ),
-        .trigger3      (trigger3        ),
-        .saida_serial  (saida_serial    ),
-        .pronto_serial (s_pronto_serial ),
-        .pronto_seg    (s_pronto_seg    ),
-        .RX            (RX              ),
-        .recepcao_serial(s_recpcao_serial ),
-        .Q_recepcao    (s_Q_recepcao    ),
-        .pronto_recepcao(s_pronto_recepcao ),
-        .cont_recepcao (s_cont_recepcao ),
-        .dado_recebido_1(s_dado_recebido_1  ),
-        .dado_recebido_2(s_dado_recebido_2  ),
-        .dado_recebido_3(s_dado_recebido_3  ),
-        .db_medida1    (s_db_medida1    ),
-        .db_medida2    (s_db_medida2    ),
-        .db_medida3    (s_db_medida3    )
+        .clock              (clock           ),
+        .zera_sensor        (s_zera_sensor   ),
+        .zera_serial        (s_zera_serial   ),
+        .zera_recpcao       (s_zera_recepcao ),
+        .cont_seg           (s_cont_seg      ),
+        .zera_seg           (s_zera_seg      ),
+        .zera_servos        (),
+        .cont_2             (s_cont_2        ),
+        .Q_2                (s_Q_2           ),
+        .zera_2             (s_zera_2        ),
+        .Q_3                (s_Q_3           ),
+        .cont_3             (s_cont_3        ),
+        .zera_3             (s_zera_3        ),
+        .medir              (s_medir         ),
+        .echo1              (echo1           ),
+        .echo2              (echo2           ),
+        .echo3              (echo3           ),
+        .partida_tx         (s_partida_tx    ),
+        .trigger1           (trigger1        ),
+        .trigger2           (trigger2        ),
+        .trigger3           (trigger3        ),
+        .saida_serial       (saida_serial    ),
+        .pronto_serial      (s_pronto_serial ),
+        .pronto_seg         (s_pronto_seg    ),
+        .RX                 (RX              ),
+        .recepcao_serial    (s_recpcao_serial ),
+        .Q_recepcao         (s_Q_recepcao    ),
+        .pronto_recepcao    (s_pronto_recepcao ),
+        .cont_recepcao      (s_cont_recepcao ),
+        .PMW1               (s_PMW1),
+        .PMW2               (s_PMW2),
+        .PMW3               (s_PMW3),
+        .db_dado_recebido_1 (s_dado_recebido_1  ),
+        .db_dado_recebido_2 (s_dado_recebido_2  ),
+        .db_dado_recebido_3 (s_dado_recebido_3  ),
+        .db_medida1         (s_db_medida1    ),
+        .db_medida2         (s_db_medida2    ),
+        .db_medida3         (s_db_medida3    )
     );
 
     
@@ -193,5 +206,8 @@ module roberto (
     assign db_hex1 = sel_med_or_rx ? db_medida1 : db_entrada_serial_1;
     assign db_hex2 = sel_med_or_rx ? db_medida2 : db_entrada_serial_2;
     assign db_hex3 = sel_med_or_rx ? db_medida3 : db_entrada_serial_3;
+    assign db_PMW1 = s_PMW1;
+    assign db_PMW2 = s_PMW2;
+    assign db_PMW3 = s_PMW3;
 
 endmodule
