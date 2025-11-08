@@ -30,6 +30,7 @@ class TelaJogo(QWidget):
         layout = QVBoxLayout()
         layout.addStretch()
         layout.addWidget(self.label_fase)
+        layout.addStretch()
         layout.addWidget(self.image_label)
         layout.addStretch()
         layout.addWidget(self.progress_bar, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -50,7 +51,7 @@ class TelaJogo(QWidget):
         # imagem
         pixmap = QPixmap(imagem)
         self.image_label.setPixmap(pixmap.scaled(
-            400, 400, 
+            800, 800, 
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         ))
@@ -66,7 +67,7 @@ class TelaJogo(QWidget):
 
         pixmap = QPixmap(imagem)
         self.image_label.setPixmap(pixmap.scaled(
-            400, 400, 
+            800, 800, 
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         ))
@@ -76,7 +77,7 @@ class TelaJogo(QWidget):
 
         pixmap = QPixmap(imagem)
         self.image_label.setPixmap(pixmap.scaled(
-            400, 400, 
+            800, 800, 
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         ))

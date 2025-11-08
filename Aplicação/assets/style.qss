@@ -1,49 +1,74 @@
-/* ===== Estilo geral ===== */
-QWidget {
-    background-color: #1E1E2E;
-    color: #F8F8F2;
-    font-family: "Segoe UI";
+/* ================================================
+   Regras de Fundo da Janela Principal
+   ================================================
+*/
+
+/* 1. Aplica a textura na JANELA PRINCIPAL (o QStackedWidget) */
+QStackedWidget#janelaPrincipal {
+    /* background-image: url(assets/imagens/fundo2.png); */
+    background-repeat: repeat;
+    background-color: #ECE9DE; /* Cor sólida se a imagem falhar */
 }
 
-/* ===== Título e textos ===== */
-QLabel {
-    font-size: 36px;
-    font-weight: bold;
-    color: #FFB86C;
+/* 2. (A MÁGICA) 
+   Encontra QUALQUER widget com o objectName 'paginaStack'
+   e o torna transparente.
+*/
+#paginaStack {
+    background-color: transparent;
 }
+
+/* ===== Títulos ===== */
+QLabel {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2C2C2C;
+    text-shadow: 1px 1px 1px #D6D2C6; /* leve sombra que destaca do papel */
+}
+
+QLabel#titulo {
+    font-size: 38px;
+    font-weight: 800;
+    color: #2C2C2C;
+    text-shadow: 1px 1px 0px #FFFFFF, -1px -1px 0px #FFFFFF;
+}
+
 
 /* ===== Botões ===== */
 QPushButton {
-    background-color: #6272A4;
-    color: white;
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    border: 2px solid #44475A;
+    background-color: #FFFDF7;
+    color: #2B2B2B;
+    border-radius: 16px;
+    padding: 14px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid #A7A397;
+    box-shadow: 2px 2px 0px #BAB6A9;
+    transition: all 0.15s ease-in-out;
 }
 
 QPushButton:hover {
-    background-color: #7085C0;
+    background-color: #F1EDDC;
+    border: 2px solid #7A776B;
+    box-shadow: 3px 3px 0px #9E9B8D;
 }
 
 QPushButton:pressed {
-    background-color: #44475A;
-    border: 2px solid #BD93F9;
+    background-color: #E5E0CF;
+    border: 2px solid #6C6A5F;
+    box-shadow: inset 2px 2px 0px #A5A192;
 }
 
 /* ===== Barra de progresso ===== */
 QProgressBar {
-    border: 2px solid #555;
+    border: 2px solid #B7B4A3;
     border-radius: 10px;
-    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #2C2C2C;
     font-weight: bold;
-    color: white;
-    background-color: #ccc;
-    font-size: 18px;
 }
 
 QProgressBar::chunk {
-    background-color: #4CAF50; /* verde */
+    background-color: #90B38A; /* verde mais suave */
     border-radius: 10px;
 }
