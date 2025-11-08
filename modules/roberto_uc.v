@@ -26,6 +26,7 @@ module roberto_uc (
 
 /******************* Estados **********************/ 
 parameter inicial       = 4'b0000;
+parameter reset         = 4'b0000; // muda os números todos depois
 parameter est_medir     = 4'b0001;
 parameter esp_seg       = 4'b0010;
 parameter envia         = 4'b0011;
@@ -53,7 +54,8 @@ end
 
 always @* begin
     case (Eatual)
-        inicial:        Eprox = jogar ? est_medir : inicial;
+        inicial:        Eprox = jogar ? reset : inicial;
+        reset:          Eprox = est_medir
         est_medir:      Eprox = esp_seg;
         esp_seg:        Eprox = pronto_seg ? envia : esp_seg;
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
@@ -84,7 +86,7 @@ always @(*) begin
     cont_recepcao = 1'b0;
 
     case (Eatual)
-        inicial: begin
+        reset: begin
             zera_sensor = 1'b1;
             zera_serial = 1'b1;
             zera_seg = 1'b1;
