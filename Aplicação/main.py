@@ -6,10 +6,14 @@ from UI.tela_vitoria import TelaVitoria
 from PyQt6.QtCore import Qt
 import sys
 from core.serial_manager import SerialLogic
+from PyQt6.QtWidgets import QColorDialog
+
 
 class MainWindow(QStackedWidget):
     def __init__(self):
         super().__init__()
+
+        self.setObjectName("janelaPrincipal")
 
         self.serial_logic = SerialLogic()
 
@@ -41,6 +45,7 @@ class MainWindow(QStackedWidget):
         self.tela_jogo.voltar_menu_signal.connect(self.abrir_menu)
         self.tela_tutorial.voltar_menu_signal.connect(self.abrir_menu)
         self.tela_vitoria.voltar_menu_signal.connect(self.abrir_menu)
+        self.tela_inicial.color_signal.connect(self.abrir_seletor_cor)
 
     def abrir_jogo(self):
         self.setCurrentWidget(self.tela_jogo)
@@ -61,6 +66,37 @@ class MainWindow(QStackedWidget):
                 self.showNormal()
             else:
                 self.showFullScreen()
+
+        elif event.key() == Qt.Key.Key_V:
+            if self.currentWidget() == self.tela_jogo:
+                self.tela_jogo.game_logic.avancar_nivel()
+
+        elif event.key() == Qt.Key.Key_L:
+            if self.currentWidget() == self.tela_jogo:
+                self.tela_jogo.game_logic.voltar_nivel()
+        
+        super().keyPressEvent(event)
+
+    def mudar_cor_fundo(self, cor):
+        estilo = f"""
+            QStackedWidget#janelaPrincipal {{
+                background-color: {cor};
+            }}
+        """
+        
+        self.setStyleSheet(estilo)
+
+    def abrir_seletor_cor(self):
+        """Abre a caixa de diálogo para o usuário escolher a cor."""
+        
+        # Pega a cor atual para começar o seletor
+        cor_atual = self.palette().window().color()
+        
+        cor = QColorDialog.getColor(cor_atual, self, "Escolha uma Cor de Fundo")
+
+        if cor.isValid():
+            # cor.name() retorna o string hexadecimal (ex: "#ff0000")
+            self.mudar_cor_fundo(cor.name())
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

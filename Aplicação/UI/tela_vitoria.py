@@ -9,14 +9,14 @@ class TelaVitoria(QWidget):
         super().__init__()
 
         # Elementos da interface
-        self.label_vitoria = QLabel("Ganhou o jogo CARALHO!")
+        self.label_vitoria = QLabel("Ganhou o jogo!")
         self.label_vitoria.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignHCenter)
 
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter | Qt.AlignmentFlag.AlignHCenter)
-        pixmap = QPixmap("assets/imagens/meandthebros.jpeg")
+        pixmap = QPixmap("assets/imagens/feedback/vitoria.png")
         self.image_label.setPixmap(pixmap.scaled(
-            400, 400, 
+            800, 800, 
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         ))
@@ -30,9 +30,9 @@ class TelaVitoria(QWidget):
         layout = QVBoxLayout()
         layout.addStretch()
         layout.addWidget(self.label_vitoria)
-        layout.addSpacing(200)
+        layout.addStretch()
         layout.addWidget(self.image_label)
-        layout.addSpacing(200)
+        layout.addStretch()
         layout.addWidget(self.btn_voltar, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 
