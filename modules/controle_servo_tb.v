@@ -27,7 +27,7 @@ module controle_servo_tb;
         .clock          (clock_in          ),
         .reset          (reset_in          ),
         .posicao        (posicao_in        ),
-        .controle (sinal_controle_out),
+        .controle       (sinal_controle_out),
         .db_controle ()
     );
 

@@ -20,22 +20,22 @@ module roberto_uc (
     output reg zera_serial,
     output reg zera_seg,
     output reg cont_seg,
+    output reg zera_servos,
     output reg pronto,
     output reg [3:0] db_estado
 );
 
 /******************* Estados **********************/ 
 parameter inicial       = 4'b0000;
-parameter reset         = 4'b0000; // muda os números todos depois
-parameter est_medir     = 4'b0001;
-parameter esp_seg       = 4'b0010;
-parameter envia         = 4'b0011;
-parameter proxEnvio     = 4'b0100;
-parameter proxSensor    = 4'b0101;
-parameter espera_recep  = 4'b0110;
-parameter proxRecepcao   = 4'b0111;
-
-parameter est_final     = 4'b1000;
+parameter est_reset     = 4'b0001; 
+parameter est_medir     = 4'b0010;
+parameter esp_seg       = 4'b0011;
+parameter envia         = 4'b0100;
+parameter proxEnvio     = 4'b0101;
+parameter proxSensor    = 4'b0110;
+parameter espera_recep  = 4'b0111;
+parameter proxRecepcao  = 4'b1000;
+parameter est_final     = 4'b1001;
 
 /******************* Variáveis de estado **********************/ 
 
@@ -54,8 +54,8 @@ end
 
 always @* begin
     case (Eatual)
-        inicial:        Eprox = jogar ? reset : inicial;
-        reset:          Eprox = est_medir
+        inicial:        Eprox = jogar ? est_reset : inicial;
+        est_reset:      Eprox = est_medir;
         est_medir:      Eprox = esp_seg;
         esp_seg:        Eprox = pronto_seg ? envia : esp_seg;
         envia:          Eprox = pronto_serial ? proxEnvio : envia;
@@ -77,6 +77,7 @@ always @(*) begin
     zera_seg = 1'b0;
     zera_2 = 1'b0;
     zera_3 = 1'b0;
+    zera_servos = 1'b0;
     medir = 1'b0;
     partida_tx = 1'b0;
     cont_2 = 1'b0;
@@ -86,13 +87,14 @@ always @(*) begin
     cont_recepcao = 1'b0;
 
     case (Eatual)
-        reset: begin
+        est_reset: begin
             zera_sensor = 1'b1;
             zera_serial = 1'b1;
             zera_seg = 1'b1;
             zera_2 = 1'b1;
             zera_3 = 1'b1;
             zera_recpcao = 1'b1;
+            zera_servos = 1'b1;
         end
         est_medir: begin
             medir = 1'b1;
@@ -125,14 +127,17 @@ end
 /******************* Saída de depuração (estados) **********************/ 
 always @* begin
     case(Eatual)
-        inicial:    db_estado = 4'b0000;
-        est_medir:  db_estado = 4'b0001;
-        esp_seg:    db_estado = 4'b0010;
-        envia:      db_estado = 4'b0011;
-        proxEnvio:  db_estado = 4'b0100;
-        proxSensor: db_estado = 4'b0101;
-        est_final:  db_estado = 4'b0110;
-        default:    db_estado = 4'b0111; // erro
+        inicial:        db_estado = 4'b0000;
+        reset:          db_estado = 4'b0001;
+        est_medir:      db_estado = 4'b0010;
+        esp_seg:        db_estado = 4'b0011;
+        envia:          db_estado = 4'b0100;
+        proxEnvio:      db_estado = 4'b0101;
+        proxSensor:     db_estado = 4'b0110;
+        espera_recep:   db_estado = 4'b0111;
+        proxRecepcao:   db_estado = 4'b1000;
+        est_final:      db_estado = 4'b1001;
+        default:        db_estado = 4'b1111; // erro
     endcase
 end
 

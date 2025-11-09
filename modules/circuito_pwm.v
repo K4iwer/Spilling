@@ -15,11 +15,10 @@
  
 module circuito_pwm #(    // valores default
     parameter conf_periodo = 1250, // Período do sinal PWM [1250 => f=4KHz (25us)]
-    parameter largura_000   = 0,    // Largura do pulso p/ 00 [0 => 0]
-    parameter largura_001   = 250,   // Largura do pulso p/ 01 [50 => 1us]
-    parameter largura_010   = 500,  // Largura do pulso p/ 10 [500 => 10us]
-    parameter largura_011   = 750,  // Largura do pulso p/ 11 [1000 => 20us]
-    parameter largura_100   = 1000
+    parameter largura_00   = 0,    // Largura do pulso p/ 00 [0 => 0]
+    parameter largura_01   = 250,   // Largura do pulso p/ 01 [50 => 1us]
+    parameter largura_10   = 500,  // Largura do pulso p/ 10 [500 => 10us]
+    parameter largura_11   = 750  // Largura do pulso p/ 11 [1000 => 20us]
 ) (
     input        clock,
     input        reset,

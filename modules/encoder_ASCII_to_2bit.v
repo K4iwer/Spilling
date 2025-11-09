@@ -1,15 +1,11 @@
-module enocder_ASCII_to_2bit (
-    input wire [6:0] ascii_in,
-    output reg [1:0] bin_out
+module encoder_ASCII_to_2bit (
+    input [6:0] ASCII_in,
+    output [1:0] bin_out
 );
 
-    always @* begin
-        case (ascii_in)
-            7'b011_0000: bin_out = 2'b00; // '0'
-            7'b011_0001: bin_out = 2'b01; // '1'
-            7'b011_0010: bin_out = 2'b10; // '2'
-            7'b011_0011: bin_out = 2'b11; // '3'
-            default: bin_out = 2'b00; // Default case
-        endcase
-end
+assign bin_out =    (ASCII_in == 7'B011_0000) ? 2'b00 :
+                    (ASCII_in == 7'B011_0001) ? 2'b01 :
+                    (ASCII_in == 7'B011_0010) ? 2'b10 :
+                    (ASCII_in == 7'B011_0011) ? 2'b11 :
+                    2'b00;                        
 endmodule

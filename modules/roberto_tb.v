@@ -13,6 +13,9 @@ module roberto_tb;
     wire trigger3;
     wire saida_serial;
     wire pronto;
+    wire db_PWM1;
+    wire db_PWM2;
+    wire db_PWM3;
 
     parameter clockPeriod = 20; // Clock de 50MHz
     always # (clockPeriod/2) clock = ~clock;
@@ -34,15 +37,18 @@ module roberto_tb;
         .trigger2(trigger2),
         .trigger3(trigger3),
         .saida_serial(saida_serial),
-        .pronto(pronto)
+        .pronto(pronto),
+        .db_PWM1(db_PWM1),
+        .db_PWM2(db_PWM2),
+        .db_PWM3(db_PWM3)
     );
 
     initial begin
         $display("Inicio das simulacoes");
-        casos_teste[0] = 5882;  // 5882us = 100cm 
-        casos_teste[1] = 5899;  // 5899us = 100,29cm (truncar para 100cm)
-        casos_teste[2] = 4353;  // 4353us = 74cm
-        casos_teste[3] = 4399;  // 4399us = 74,79cm (arredondar para 75cm)
+        casos_teste[0] = 1176;  // 1176us = 20cm 
+        casos_teste[1] = 588;  // 588us = 10cm
+        //casos_teste[2] = 4353;  // 4353us = 74cm
+        //casos_teste[3] = 4399;  // 4399us = 74,79cm (arredondar para 75cm)
         // Define o período de um bit para o baud rate de 115000
         bit_period = 1_000_000_000 / 115000; // em nanosegundos
 
@@ -57,7 +63,7 @@ module roberto_tb;
         #20 reset = 0;  // Libera o reset após 20ns
         #100_000; // Espera 100us para início de operação do Sonar
 
-        for (i = 0; i < 4; i = i + 1) begin
+        for (i = 0; i < 1; i = i + 1) begin
             #(bit_period * 200);
             $display("Caso");
             #20 ligar = 1;
@@ -76,12 +82,12 @@ module roberto_tb;
 
             #(bit_period * 2500);
 
-            enviar_palavra_serial(7'b011_0000, bit_period); // Primeira palavra
+            enviar_palavra_serial(7'b011_0000, bit_period); // 00
             #(bit_period * 10); // Tempo entre palavras
-            enviar_palavra_serial(7'b011_0001, bit_period); // Segunda palavra
+            enviar_palavra_serial(7'b011_0001, bit_period); // 1
             #(bit_period * 10); // Tempo entre palavras
-            enviar_palavra_serial(7'b011_0010, bit_period); // Terceira palavra
-
+            enviar_palavra_serial(7'b011_0010, bit_period); // 2
+            #(200_000_000); // espera o tempo do PMW
         end
         #100_000; 
 
