@@ -60,7 +60,8 @@
         .meio    (     )  // (desconectada)
     );
      
-    assign dados7 = (erro ? 7'b011_1111 : s_saida[7:1]);
+    //assign dados7 = (erro ? 7'b011_1111 : s_saida[7:1]);
+    assign dados7 = s_saida[7:1];
     assign bit_paridade = s_saida[8];
     assign par_ok = ((^dados7) == bit_paridade);
     

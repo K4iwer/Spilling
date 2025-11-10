@@ -8,6 +8,9 @@ module roberto_uc (
     input wire [1:0] Q_recepcao,
     input wire pronto_serial,
     input wire pronto_recepcao,
+    input wire carrega_reg_1,
+    input wire carrega_reg_2,
+    input wire carrega_reg_3,
     output reg cont_2,
     output reg cont_3,
     output reg zera_2,
@@ -114,7 +117,9 @@ always @(*) begin
         end
         proxRecepcao: begin
             cont_recepcao = 1'b1;
-
+            carrega_reg_1 = (Q_recepcao == 2'b00 ? 1'b1 : 1'b0 );
+            carrega_reg_2 = (Q_recepcao == 2'b01 ? 1'b1 : 1'b0 );
+            carrega_reg_3 = (Q_recepcao == 2'b10 ? 1'b1 : 1'b0 );
         end
         est_final: begin
             zera_2 = 1'b1;

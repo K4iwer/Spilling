@@ -61,6 +61,9 @@ module roberto (
     wire [6:0] s_dado_recebido_3;
     wire [6:0]  s_recpcao_serial;
     wire        s_pronto_recepcao;
+    wire s_carrega_reg1;
+    wire s_carrega_reg2;
+    wire s_carrega_reg3;
     wire [1:0]  s_Q_recepcao; 
     wire        s_cont_recepcao;
     wire        s_PWM1;
@@ -95,6 +98,9 @@ module roberto (
         .RX                 (RX              ),
         .recepcao_serial    (s_recpcao_serial ),
         .Q_recepcao         (s_Q_recepcao    ),
+        .carrega_reg_1      (s_carrega_reg1),
+        .carrega_reg_2      (s_carrega_reg2),
+        .carrega_reg_3      (s_carrega_reg3),
         .pronto_recepcao    (s_pronto_recepcao ),
         .cont_recepcao      (s_cont_recepcao ),
         .PWM1               (s_PWM1),
@@ -117,6 +123,9 @@ module roberto (
         .Q_2            (s_Q_2              ),
         .Q_3            (s_Q_3              ),
         .Q_recepcao     (s_Q_recepcao       ),
+        .carrega_reg_1  (s_carrega_reg1),
+        .carrega_reg_2  (s_carrega_reg2),
+        .carrega_reg_3  (s_carrega_reg3),
         .pronto_recepcao (s_pronto_recepcao  ),
         .cont_recepcao  (s_cont_recepcao    ),
         .pronto_serial  (s_pronto_serial    ),

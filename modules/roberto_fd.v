@@ -17,6 +17,9 @@ module roberto_fd (
     input  wire cont_3,
     input  wire RX,
     input  wire cont_recepcao,
+    input  wire carrega_reg_1,
+    input  wire carrega_reg_1,
+    input  wire carrega_reg_1,
     output wire [6:0] recepcao_serial, // mudar pra saída do mux
     output wire pronto_recepcao,  
     output wire [1:0] Q_3,
@@ -50,9 +53,6 @@ module roberto_fd (
     wire [6:0]  s_entr_serial;
     wire [1:0]  s_Q_2;
     wire [1:0]  s_Q_3;
-    wire s_carrega_reg_1;
-    wire s_carrega_reg_2;
-    wire s_carrega_reg_3;
     wire [1:0] s_posicao_servo_1;
     wire [1:0] s_posicao_servo_2;
     wire [1:0] s_posicao_servo_3;
@@ -190,7 +190,7 @@ module roberto_fd (
     ) recepcao_serial_1 (
         .clock   ( clock              ),
         .clear   ( zera_recpcao       ),
-        .enable  ( s_carrega_reg_1      ),
+        .enable  ( carrega_reg_1      ),
         .D       ( recepcao_serial     ),
         .Q       ( s_dado_recebido_1    )
     );
@@ -201,7 +201,7 @@ module roberto_fd (
     ) recepcao_serial_2 (
         .clock   ( clock              ),
         .clear   ( zera_recpcao       ),
-        .enable  ( s_carrega_reg_2      ),
+        .enable  ( carrega_reg_2      ),
         .D       ( recepcao_serial     ),
         .Q       ( s_dado_recebido_2    )
     );
@@ -212,7 +212,7 @@ module roberto_fd (
     ) recepcao_serial_3 (
         .clock   ( clock              ),
         .clear   ( zera_recpcao       ),
-        .enable  ( s_carrega_reg_3      ),
+        .enable  ( carrega_reg_3      ),
         .D       ( recepcao_serial     ),
         .Q       ( s_dado_recebido_3    )
     );
@@ -319,9 +319,9 @@ module roberto_fd (
     assign Q_2 = s_Q_2;
     assign Q_3 = s_Q_3;
     assign Q_recepcao = s_Q_recepcao;
-    assign s_carrega_reg_1 = pronto_recepcao & (s_Q_recepcao == 2'b00);
-    assign s_carrega_reg_2 = pronto_recepcao & (s_Q_recepcao == 2'b01);
-    assign s_carrega_reg_3 = pronto_recepcao & (s_Q_recepcao == 2'b10);
+    // assign carrega_reg_1 = pronto_recepcao & (s_Q_recepcao == 2'b00);
+    // assign carrega_reg_2 = pronto_recepcao & (s_Q_recepcao == 2'b01);
+    // assign carrega_reg_3 = pronto_recepcao & (s_Q_recepcao == 2'b10);
     assign db_medida1 = s_medida1;
     assign db_medida2 = s_medida2;
     assign db_medida3 = s_medida3;
