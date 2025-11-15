@@ -18,8 +18,8 @@ module roberto_fd (
     input  wire RX,
     input  wire cont_recepcao,
     input  wire carrega_reg_1,
-    input  wire carrega_reg_1,
-    input  wire carrega_reg_1,
+    input  wire carrega_reg_2,
+    input  wire carrega_reg_3,
     output wire [6:0] recepcao_serial, // mudar pra saída do mux
     output wire pronto_recepcao,  
     output wire [1:0] Q_3,

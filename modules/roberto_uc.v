@@ -8,9 +8,9 @@ module roberto_uc (
     input wire [1:0] Q_recepcao,
     input wire pronto_serial,
     input wire pronto_recepcao,
-    input wire carrega_reg_1,
-    input wire carrega_reg_2,
-    input wire carrega_reg_3,
+    output reg carrega_reg_1,
+    output reg carrega_reg_2,
+    output reg carrega_reg_3,
     output reg cont_2,
     output reg cont_3,
     output reg zera_2,
@@ -65,7 +65,7 @@ always @* begin
         proxEnvio:      Eprox = (Q_3 == 2'b11) ? proxSensor : envia;
         proxSensor:     Eprox = (Q_2 == 2'b10) ? espera_recep : envia;
         espera_recep:   Eprox = pronto_recepcao ? proxRecepcao : espera_recep;
-        proxRecepcao:   Eprox = (Q_recepcao == 2'b10) ? est_final : espera_recep;
+        proxRecepcao:   Eprox = (Q_recepcao == 2'b11) ? est_final : espera_recep;
         est_final:      Eprox = inicial;
         default:        Eprox = inicial;
     endcase
