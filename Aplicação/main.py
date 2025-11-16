@@ -87,16 +87,24 @@ class MainWindow(QStackedWidget):
         self.setStyleSheet(estilo)
 
     def abrir_seletor_cor(self):
-        """Abre a caixa de diálogo para o usuário escolher a cor."""
+        from PyQt6.QtWidgets import QDialog, QPushButton, QHBoxLayout
         
-        # Pega a cor atual para começar o seletor
-        cor_atual = self.palette().window().color()
-        
-        cor = QColorDialog.getColor(cor_atual, self, "Escolha uma Cor de Fundo")
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Cor de Fundo")
+        layout = QHBoxLayout()
 
-        if cor.isValid():
-            # cor.name() retorna o string hexadecimal (ex: "#ff0000")
-            self.mudar_cor_fundo(cor.name())
+        cores = ["#ECE9DE", "#ffffff", "#cccccc", "#aaaaaa", "#888888",
+                "#ff9999", "#99ccff", "#ccffcc", "#ffff99"]
+
+        for c in cores:
+            btn = QPushButton()
+            btn.setFixedSize(40, 40)
+            btn.setStyleSheet(f"background-color: {c}; border-radius: 5px;")
+            btn.clicked.connect(lambda _, cor=c: (self.mudar_cor_fundo(cor), dialog.accept()))
+            layout.addWidget(btn)
+
+        dialog.setLayout(layout)
+        dialog.exec()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

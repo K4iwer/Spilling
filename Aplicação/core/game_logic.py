@@ -51,11 +51,17 @@ class GameLogic(QObject):
 
         print("Recebido:", data)
         dado = self.filtrar_dado(data)
-        print("Tratado: ", dado)
+        print("Tratado:", dado)
         expected = self.levels[self.current_level]["resposta"]
 
-        self.serial_logic.send_serial(dado)
+        # ✅ Apenas envia se for exatamente 3 dígitos numéricos
+        if dado.strip().isdigit() and len(dado.strip()) == 3:
+            self.serial_logic.send_serial(dado)
+            print(f"📤 Enviado (padrão válido de 3 dígitos): {dado}")
+        else:
+            print(f"⚠️ '{dado}' não é uma sequência de 3 números — não será enviado.")
 
+        # Verifica se a resposta está correta
         if dado.strip() == expected:
             print("✅ Resposta correta!")
             self.timer.stop()
@@ -63,6 +69,7 @@ class GameLogic(QObject):
         else:
             print("❌ Resposta incorreta.")
             self.mostrar_errou()
+
         
 
     def avancar_nivel(self):
@@ -106,13 +113,13 @@ class GameLogic(QObject):
         try:
             val = int(valor)
         except (ValueError, TypeError):
-            return
+            return 
         
-        if val <= 80:
+        if val <= 8:
             return "1"
-        elif 90 <= val <= 100:
+        elif 8 < val <= 16:
             return "2"
-        elif 140 <= val <= 200:
+        elif 16 < val <= 24:
             return "3"
         else:
             return "4"

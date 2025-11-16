@@ -7,8 +7,6 @@ module roberto (
     input wire echo3,
     input wire sel_med1,
     input wire sel_med2,
-    input wire sel_med_or_rx,
-    input wire RX,
     output wire trigger1,
     output wire trigger2,
     output wire trigger3,
@@ -30,7 +28,6 @@ module roberto (
     wire s_zera_sensor;
     wire s_zera_serial;
     wire s_zera_seg;
-    wire s_zera_recepcao;
     wire s_zera_servos;
     wire s_cont_2;
     wire [1:0] s_Q_2;
@@ -53,25 +50,16 @@ module roberto (
     wire [6:0] db_medida1;
     wire [6:0] db_medida2;
     wire [6:0] db_medida3;
-    wire [6:0] db_entrada_serial_1;
-    wire [6:0] db_entrada_serial_2;
-    wire [6:0] db_entrada_serial_3;
-    wire [6:0] s_dado_recebido_1;
-    wire [6:0] s_dado_recebido_2;
-    wire [6:0] s_dado_recebido_3;
-    wire [6:0]  s_recpcao_serial;
-    wire        s_pronto_recepcao;
-    wire [1:0]  s_Q_recepcao; 
-    wire        s_cont_recepcao;
     wire        s_PWM1;
     wire        s_PWM2;
     wire        s_PWM3;
+    wire        s_carrega_disc;
+    wire        s_zera_disc;
 
     roberto_fd FD (
         .clock              (clock           ),
         .zera_sensor        (s_zera_sensor   ),
         .zera_serial        (s_zera_serial   ),
-        .zera_recpcao       (s_zera_recepcao ),
         .cont_seg           (s_cont_seg      ),
         .zera_seg           (s_zera_seg      ),
         .zera_servos        (s_zera_servos   ),
@@ -92,17 +80,11 @@ module roberto (
         .saida_serial       (saida_serial    ),
         .pronto_serial      (s_pronto_serial ),
         .pronto_seg         (s_pronto_seg    ),
-        .RX                 (RX              ),
-        .recepcao_serial    (s_recpcao_serial ),
-        .Q_recepcao         (s_Q_recepcao    ),
-        .pronto_recepcao    (s_pronto_recepcao ),
-        .cont_recepcao      (s_cont_recepcao ),
         .PWM1               (s_PWM1),
         .PWM2               (s_PWM2),
         .PWM3               (s_PWM3),
-        .db_dado_recebido_1 (s_dado_recebido_1  ),
-        .db_dado_recebido_2 (s_dado_recebido_2  ),
-        .db_dado_recebido_3 (s_dado_recebido_3  ),
+        .carrega_disc       (s_carrega_disc  ),
+        .zera_disc          (s_zera_disc     ),
         .db_medida1         (s_db_medida1    ),
         .db_medida2         (s_db_medida2    ),
         .db_medida3         (s_db_medida3    )
@@ -116,15 +98,11 @@ module roberto (
         .pronto_seg     (s_pronto_seg       ),
         .Q_2            (s_Q_2              ),
         .Q_3            (s_Q_3              ),
-        .Q_recepcao     (s_Q_recepcao       ),
-        .pronto_recepcao (s_pronto_recepcao  ),
-        .cont_recepcao  (s_cont_recepcao    ),
         .pronto_serial  (s_pronto_serial    ),
         .cont_2         (s_cont_2           ),
         .cont_3         (s_cont_3           ),
         .zera_2         (s_zera_2           ),
         .zera_3         (s_zera_3           ),
-        .zera_recpcao   (s_zera_recepcao    ),
         .zera_servos    (s_zera_servos      ),
         .partida_tx     (s_partida_tx       ),
         .medir          (s_medir            ),
@@ -133,6 +111,8 @@ module roberto (
         .zera_seg       (s_zera_seg         ),
         .cont_seg       (s_cont_seg         ),
         .pronto         (pronto             ),
+        .carrega_disc   (s_carrega_disc     ),
+        .zera_disc      (s_zera_disc        ),
         .db_estado      (s_db_estado        )
     );
 
@@ -175,23 +155,23 @@ module roberto (
         .display ( db_medida3       )
     );
 
-    // hexa recepcao serial 1
-    hexa7seg_ASC HEX_serial_1 ( 
-        .hexa    ( s_dado_recebido_1 ), 
-        .display ( db_entrada_serial_1)
-    );
+    // // hexa recepcao serial 1
+    // hexa7seg_ASC HEX_serial_1 ( 
+    //     .hexa    ( s_dado_recebido_1 ), 
+    //     .display ( db_entrada_serial_1)
+    // );
 
-    // hexa recepcao serial 2
-    hexa7seg_ASC HEX_serial_2 ( 
-        .hexa    ( s_dado_recebido_2 ), 
-        .display ( db_entrada_serial_2)
-    );
+    // // hexa recepcao serial 2
+    // hexa7seg_ASC HEX_serial_2 ( 
+    //     .hexa    ( s_dado_recebido_2 ), 
+    //     .display ( db_entrada_serial_2)
+    // );
 
-    // hexa recepcao serial 3
-    hexa7seg_ASC HEX_serial_3 ( 
-        .hexa    ( s_dado_recebido_3 ), 
-        .display ( db_entrada_serial_3)
-    );
+    // // hexa recepcao serial 3
+    // hexa7seg_ASC HEX_serial_3 ( 
+    //     .hexa    ( s_dado_recebido_3 ), 
+    //     .display ( db_entrada_serial_3)
+    // );
 
     // mux serial
     mux_4x1_n #(
@@ -211,8 +191,8 @@ module roberto (
     assign db_PWM1 = s_PWM1;
     assign db_PWM2 = s_PWM2;
     assign db_PWM3 = s_PWM3;
-    assign db_hex1 = sel_med_or_rx ? db_medida1 : db_entrada_serial_1;
-    assign db_hex2 = sel_med_or_rx ? db_medida2 : db_entrada_serial_2;
-    assign db_hex3 = sel_med_or_rx ? db_medida3 : db_entrada_serial_3;
+    assign db_hex1 = db_medida1;
+    assign db_hex2 = db_medida2;
+    assign db_hex3 = db_medida3;
 
 endmodule

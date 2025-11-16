@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QScrollArea
 from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtGui import QFont
 
 
 class TelaTutorial(QWidget):
@@ -9,10 +10,26 @@ class TelaTutorial(QWidget):
         super().__init__()
 
         # Elementos da interface
-        self.label_tutorial = QLabel("Tutorial do jogo")
-        self.label_tutorial.setAlignment(Qt.AlignmentFlag.AlignHCenter)
+        self.label_expl = QLabel("""
+            <p style="line-height: 1.6;">
+            <b>Bem-vindo ao Roberto!</b><br><br>
 
-        self.label_expl = QLabel("O jogo consiste ...")
+            Neste jogo, você irá avançar por diferentes fases combinando
+            <b>um personagem</b> com <b>uma situação</b> para alcançar o 
+            <b>estado emocional correto</b>.<br><br>
+
+            <b>Como jogar:</b><br>
+            1. Escolha o personagem, a situação e a emoção posicionando o suporte na área indicada.<br>
+            2. Aperte o botão de jogada na estrutura física<br>
+            3. Observe sua jogada pelos discos e a resposta do jogo pela tela<br>
+
+            Divirta-se explorando emoções, raciocínio e criatividade!
+            </p>
+        """)
+
+        self.label_expl.setWordWrap(True)
+        self.label_expl.setAlignment(Qt.AlignmentFlag.AlignJustify)
+        self.label_expl.setFont(QFont("Arial", 14))
         self.label_expl.setAlignment(Qt.AlignmentFlag.AlignHCenter)
 
         self.btn_voltar = QPushButton("Voltar ao Menu")
@@ -23,10 +40,8 @@ class TelaTutorial(QWidget):
         # Layout
         layout = QVBoxLayout()
         layout.addStretch()
-        layout.addWidget(self.label_tutorial)
-        layout.addSpacing(200)
         layout.addWidget(self.label_expl)
-        layout.addSpacing(200)
+        layout.addStretch()
         layout.addWidget(self.btn_voltar, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addStretch()
 

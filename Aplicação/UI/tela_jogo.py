@@ -27,16 +27,16 @@ class TelaJogo(QWidget):
         self.btn_voltar.setMinimumHeight(60)
 
         # Layout
-        layout = QVBoxLayout()
-        layout.addStretch()
-        layout.addWidget(self.label_fase)
-        layout.addStretch()
-        layout.addWidget(self.image_label)
-        layout.addStretch()
-        layout.addWidget(self.progress_bar, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.btn_voltar, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout.addStretch()
-        self.setLayout(layout)
+        self.layout = QVBoxLayout()
+        self.layout.addStretch()
+        self.layout.addWidget(self.label_fase)
+        self.layout.addStretch()
+        self.layout.addWidget(self.image_label)
+        self.layout.addStretch()
+        self.layout.addWidget(self.progress_bar, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout.addWidget(self.btn_voltar, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout.addStretch()
+        self.setLayout(self.layout)
 
         # Game Logic
         self.game_logic = GameLogic(serial_logic)
@@ -51,7 +51,8 @@ class TelaJogo(QWidget):
         # imagem
         pixmap = QPixmap(imagem)
         self.image_label.setPixmap(pixmap.scaled(
-            800, 800, 
+            700, 
+            700, 
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         ))

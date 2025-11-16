@@ -3,17 +3,10 @@
    ================================================
 */
 
-/* 1. Aplica a textura na JANELA PRINCIPAL (o QStackedWidget) */
 QStackedWidget#janelaPrincipal {
-    /* background-image: url(assets/imagens/fundo2.png); */
-    background-repeat: repeat;
     background-color: #ECE9DE; /* Cor sólida se a imagem falhar */
 }
 
-/* 2. (A MÁGICA) 
-   Encontra QUALQUER widget com o objectName 'paginaStack'
-   e o torna transparente.
-*/
 #paginaStack {
     background-color: transparent;
 }
