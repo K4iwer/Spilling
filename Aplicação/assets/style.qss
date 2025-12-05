@@ -1,0 +1,67 @@
+/* ================================================
+   Regras de Fundo da Janela Principal
+   ================================================
+*/
+
+QStackedWidget#janelaPrincipal {
+    background-color: #ECE9DE; /* Cor sólida se a imagem falhar */
+}
+
+#paginaStack {
+    background-color: transparent;
+}
+
+/* ===== Títulos ===== */
+QLabel {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2C2C2C;
+    text-shadow: 1px 1px 1px #D6D2C6; /* leve sombra que destaca do papel */
+}
+
+QLabel#titulo {
+    font-size: 38px;
+    font-weight: 800;
+    color: #2C2C2C;
+    text-shadow: 1px 1px 0px #FFFFFF, -1px -1px 0px #FFFFFF;
+}
+
+
+/* ===== Botões ===== */
+QPushButton {
+    background-color: #FFFDF7;
+    color: #2B2B2B;
+    border-radius: 16px;
+    padding: 14px 30px;
+    font-size: 18px;
+    font-weight: 600;
+    border: 2px solid #A7A397;
+    box-shadow: 2px 2px 0px #BAB6A9;
+    transition: all 0.15s ease-in-out;
+}
+
+QPushButton:hover {
+    background-color: #F1EDDC;
+    border: 2px solid #7A776B;
+    box-shadow: 3px 3px 0px #9E9B8D;
+}
+
+QPushButton:pressed {
+    background-color: #E5E0CF;
+    border: 2px solid #6C6A5F;
+    box-shadow: inset 2px 2px 0px #A5A192;
+}
+
+/* ===== Barra de progresso ===== */
+QProgressBar {
+    border: 2px solid #B7B4A3;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: #2C2C2C;
+    font-weight: bold;
+}
+
+QProgressBar::chunk {
+    background-color: #90B38A; /* verde mais suave */
+    border-radius: 10px;
+}
