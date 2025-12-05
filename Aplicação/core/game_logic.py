@@ -19,9 +19,9 @@ class GameLogic(QObject):
             {"id": 7,  "texto": "Fase 7: Descubra pelo contexto!",      "imagem": "assets/imagens/fases/fase7.png",  "resposta": "333"},
             {"id": 8,  "texto": "Fase 8: Descubra pelo contexto!",      "imagem": "assets/imagens/fases/fase8.png",  "resposta": "421"},
             {"id": 9,  "texto": "Fase 9: Menino + Sorvete = ?",         "imagem": "assets/imagens/fases/fase9.png",  "resposta": "111"},
-            {"id": 10, "texto": "Fase 10: Menina + ? = Assustada",      "imagem": "assets/imagens/fases/fase10.png", "resposta": "223"},
+            {"id": 10, "texto": "Fase 10: Menina + ? = Assustada",      "imagem": "assets/imagens/fases/fase10.png", "resposta": "224"},
             {"id": 11, "texto": "Fase 11: Cachorro + Brinquedo = ?",    "imagem": "assets/imagens/fases/fase11.png", "resposta": "341"},
-            {"id": 12, "texto": "Fase 12: Robô + Chuva = Assustado",    "imagem": "assets/imagens/fases/fase12.png", "resposta": "434"},
+            {"id": 12, "texto": "Fase 12: ? + Chuva = Assustado",       "imagem": "assets/imagens/fases/fase12.png", "resposta": "434"},
         ]
         self.current_level = 0
         self.timer = QTimer()
@@ -115,11 +115,11 @@ class GameLogic(QObject):
         except (ValueError, TypeError):
             return 
         
-        if val <= 8:
+        if val <= 6:
             return "1"
-        elif 8 < val <= 16:
+        elif 6 < val <= 12:
             return "2"
-        elif 16 < val <= 24:
+        elif 12 < val <= 18:
             return "3"
         else:
             return "4"

@@ -12,7 +12,7 @@ class TelaTutorial(QWidget):
         # Elementos da interface
         self.label_expl = QLabel("""
             <p style="line-height: 1.6;">
-            <b>Bem-vindo ao Roberto!</b><br><br>
+            <b>Bem-vindo ao Spilling!</b><br><br>
 
             Neste jogo, você irá avançar por diferentes fases combinando
             <b>um personagem</b> com <b>uma situação</b> para alcançar o 

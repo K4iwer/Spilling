@@ -17,7 +17,7 @@ class TelaInicial(QWidget):
         self.setObjectName("paginaStack")
 
         # Elementos da interface
-        self.label = QLabel("Roberto")
+        self.label = QLabel("Spilling")
         self.label.setObjectName("titulo")
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
