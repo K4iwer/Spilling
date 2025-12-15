@@ -20,11 +20,11 @@ module discretizador #(
     // Discretização combinacional
     reg [1:0] saida_calc;
     always @(*) begin
-        if (valor_int <= 8)
+        if (valor_int <= 6)
             saida_calc = 2'b00;        // categoria 1
-        else if (valor_int <= 16)
+        else if (valor_int <= 12)
             saida_calc = 2'b01;        // categoria 2
-        else if (valor_int <= 24)
+        else if (valor_int <= 18)
             saida_calc = 2'b10;        // categoria 3
         else
             saida_calc = 2'b11;        // categoria 4
