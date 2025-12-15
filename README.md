@@ -1,10 +1,10 @@
-# Spilling 🌀💙
+# Spilling 
 
 **Spilling** (uma junção de "Spinning" e "Feeling") é um jogo sério híbrido (físico e digital) desenvolvido para auxiliar no desenvolvimento socioemocional e cognitivo de crianças com Transtorno do Espectro Autista (TEA).
 
 Este projeto foi desenvolvido como parte da disciplina **PCS3645 - Laboratório Digital II** da Escola Politécnica da USP.
 
-## 🎯 Propósito do Projeto
+## Propósito do Projeto
 
 A proposta central do Spilling é utilizar uma interface tangível para ensinar como personagens reagem a diferentes objetos e situações, transformando conceitos abstratos de empatia e causalidade em uma interação física concreta.
 
@@ -13,7 +13,7 @@ O jogo visa:
 * **Reforço Positivo:** O sistema prioriza o incentivo e evita punições, mantendo o engajamento.
 * **Tangibilidade:** O uso de controles físicos promove a coordenação motora fina e oferece uma noção concreta de causa e efeito.
 
-## 🎮 Como Funciona
+## Como Funciona
 
 O sistema opera através da integração entre uma aplicação de software e uma estrutura de hardware (controlada por uma FPGA).
 
@@ -32,7 +32,7 @@ Funcionalidades da interface:
 
 ---
 
-## 📸 Imagens
+## Imagens
 
 ### Estrutura Física
 *(A estrutura conta com discos giratórios e base para seleção de peças via sensores ultrassônicos)*
@@ -47,7 +47,7 @@ Funcionalidades da interface:
 
 ---
 
-## 🚀 Como Rodar a Aplicação
+## Como Rodar a Aplicação
 
 Para executar a interface do jogo em seu computador, siga os passos abaixo. É recomendado o uso de um ambiente virtual (`venv`) para gerenciar as dependências.
 
