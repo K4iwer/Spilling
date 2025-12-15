@@ -1,6 +1,6 @@
 `timescale 1ns/1ns
 
-module roberto_tb;
+module spilling_tb;
     reg clock;
     reg reset;
     reg ligar;
@@ -24,7 +24,7 @@ module roberto_tb;
     // Variável para o período de um bit no protocolo 7E1
     real bit_period;
 
-    roberto DUT (
+    spilling DUT (
         .clock(clock),
         .reset(reset),
         .ligar(ligar),
@@ -43,10 +43,10 @@ module roberto_tb;
 
     initial begin
         $display("Inicio das simulacoes");
-        casos_teste[0] = 706;  // 1176us = 12cm 
-        casos_teste[1] = 588;  // 588us = 10cm
-        casos_teste[2] = 4353;  // 4353us = 74cm
-        casos_teste[3] = 4399;  // 4399us = 74,79cm (arredondar para 75cm)
+        casos_teste[0] = 411;  // 411us = 7cm, categoria 1 (00)
+        casos_teste[1] = 706;  // 706us = 12cm, categoria 2 (01)
+        casos_teste[2] = 1294;  // 1294us = 22cm, categoria 3 (10)
+        casos_teste[3] = 1471;  // 1471us = 25cm, categoria 4 (11)
         // Define o período de um bit para o baud rate de 115000
         bit_period = 1_000_000_000 / 115200; // em nanosegundos
 

@@ -1,4 +1,4 @@
-module roberto (
+module spilling (
     input wire clock,
     input wire reset,
     input wire ligar,
@@ -56,7 +56,7 @@ module roberto (
     wire        s_carrega_disc;
     wire        s_zera_disc;
 
-    roberto_fd FD (
+    spilling_fd FD (
         .clock              (clock           ),
         .zera_sensor        (s_zera_sensor   ),
         .zera_serial        (s_zera_serial   ),
@@ -91,7 +91,7 @@ module roberto (
     );
 
     
-    roberto_uc UC (
+    spilling_uc UC (
         .clock          (clock              ),
         .reset          (reset              ),
         .jogar          (s_ligar            ),
